@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.19.0.xsd">
+    <jdbc>
+        <driver>org.postgresql.Driver</driver>
+        <url>jdbc:postgresql://localhost:5431/money_transfer_db</url>
+        <user>myuser</user>
+        <password>mypassword</password>
+    </jdbc>
+
+    <generator>
+        <name>org.jooq.codegen.DefaultGenerator</name>
+        <database>
+            <name>org.jooq.meta.postgres.PostgresDatabase</name>
+            <schemata>
+                <schema>
+                    <inputSchema>public</inputSchema>
+                </schema>
+                <schema>
+                    <inputSchema>auth</inputSchema>
+                </schema>
+                <schema>
+                    <inputSchema>money_transfer</inputSchema>
+                </schema>
+            </schemata>
+            <includes>.*</includes>
+            <excludes>flyway_schema_history</excludes>
+
+        </database>
+
+        <target>
+            <packageName>jooq</packageName>
+            <directory>src/main/java</directory>
+        </target>
+
+        <generate>
+            <pojos>true</pojos>
+            <daos>false</daos>
+            <fluentSetters>true</fluentSetters>
+            <immutablePojos>false</immutablePojos>
+        </generate>
+    </generator>
+</configuration>

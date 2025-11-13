@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: money-transfer-system
+
+  datasource:
+    url: jdbc:postgresql://localhost:5431/money_transfer_db
+    username: myuser
+    password: mypassword
+    driver-class-name: org.postgresql.Driver
+
+  jooq:
+    sql-dialect: postgres

@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: 'postgres:17'
+    container_name: money_transfer
+    restart: always
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: money_transfer_db
+    ports:
+      - "5431:5432"  # Внешний порт 5431, внутренний 5432
+    volumes:
+      - money_transfer_pg_data:/var/lib/postgresql/data
+
+volumes:
+  money_transfer_pg_data:
