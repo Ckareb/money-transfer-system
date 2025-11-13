@@ -16,6 +16,7 @@ public class TransactionHistory {
     private Long statusId;
     private LocalDateTime createdAt;
     private String description;
+    private String terminalCode;
 
     public TransactionHistory(Long id,
                               Long fromAccountId,
@@ -25,7 +26,8 @@ public class TransactionHistory {
                               Long typeId,
                               Long statusId,
                               LocalDateTime createdAt,
-                              String description) {
+                              String description,
+                              String terminalCode) {
         this.id = id;
         this.fromAccountId = fromAccountId;
         this.toAccountId = toAccountId;
@@ -35,5 +37,6 @@ public class TransactionHistory {
         this.statusId = statusId;
         this.createdAt = createdAt;
         this.description = description;
+        this.terminalCode = terminalCode;
     }
 }

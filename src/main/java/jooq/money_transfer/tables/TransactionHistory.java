@@ -72,12 +72,12 @@ public class TransactionHistory extends TableImpl<TransactionHistoryRecord> {
      * The column
      * <code>money_transfer.transaction_history.from_account_id</code>.
      */
-    public final TableField<TransactionHistoryRecord, Long> FROM_ACCOUNT_ID = createField(DSL.name("from_account_id"), SQLDataType.BIGINT.nullable(false), this, "");
+    public final TableField<TransactionHistoryRecord, Long> FROM_ACCOUNT_ID = createField(DSL.name("from_account_id"), SQLDataType.BIGINT, this, "");
 
     /**
      * The column <code>money_transfer.transaction_history.to_account_id</code>.
      */
-    public final TableField<TransactionHistoryRecord, Long> TO_ACCOUNT_ID = createField(DSL.name("to_account_id"), SQLDataType.BIGINT.nullable(false), this, "");
+    public final TableField<TransactionHistoryRecord, Long> TO_ACCOUNT_ID = createField(DSL.name("to_account_id"), SQLDataType.BIGINT, this, "");
 
     /**
      * The column <code>money_transfer.transaction_history.amount</code>.
@@ -108,6 +108,11 @@ public class TransactionHistory extends TableImpl<TransactionHistoryRecord> {
      * The column <code>money_transfer.transaction_history.description</code>.
      */
     public final TableField<TransactionHistoryRecord, String> DESCRIPTION = createField(DSL.name("description"), SQLDataType.VARCHAR(4000), this, "");
+
+    /**
+     * The column <code>money_transfer.transaction_history.terminal_code</code>.
+     */
+    public final TableField<TransactionHistoryRecord, String> TERMINAL_CODE = createField(DSL.name("terminal_code"), SQLDataType.VARCHAR(100), this, "");
 
     private TransactionHistory(Name alias, Table<TransactionHistoryRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);

@@ -158,6 +158,21 @@ public class TransactionHistoryRecord extends UpdatableRecordImpl<TransactionHis
         return (String) get(8);
     }
 
+    /**
+     * Setter for <code>money_transfer.transaction_history.terminal_code</code>.
+     */
+    public TransactionHistoryRecord setTerminalCode(String value) {
+        set(9, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>money_transfer.transaction_history.terminal_code</code>.
+     */
+    public String getTerminalCode() {
+        return (String) get(9);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -181,7 +196,7 @@ public class TransactionHistoryRecord extends UpdatableRecordImpl<TransactionHis
     /**
      * Create a detached, initialised TransactionHistoryRecord
      */
-    public TransactionHistoryRecord(Long id, Long fromAccountId, Long toAccountId, BigDecimal amount, String currency, Long typeId, Long statusId, LocalDateTime createdAt, String description) {
+    public TransactionHistoryRecord(Long id, Long fromAccountId, Long toAccountId, BigDecimal amount, String currency, Long typeId, Long statusId, LocalDateTime createdAt, String description, String terminalCode) {
         super(TransactionHistory.TRANSACTION_HISTORY);
 
         setId(id);
@@ -193,6 +208,7 @@ public class TransactionHistoryRecord extends UpdatableRecordImpl<TransactionHis
         setStatusId(statusId);
         setCreatedAt(createdAt);
         setDescription(description);
+        setTerminalCode(terminalCode);
         resetTouchedOnNotNull();
     }
 
@@ -212,6 +228,7 @@ public class TransactionHistoryRecord extends UpdatableRecordImpl<TransactionHis
             setStatusId(value.getStatusId());
             setCreatedAt(value.getCreatedAt());
             setDescription(value.getDescription());
+            setTerminalCode(value.getTerminalCode());
             resetTouchedOnNotNull();
         }
     }

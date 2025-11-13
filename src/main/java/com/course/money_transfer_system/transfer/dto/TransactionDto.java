@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 @Data
 public class TransactionDto {
     private Long typeId;
-    private String accountNumberFrom;
-    private String accountNumberTo;
+    private String numberFrom;
+    private String numberTo;
     private BigDecimal amount;
 }

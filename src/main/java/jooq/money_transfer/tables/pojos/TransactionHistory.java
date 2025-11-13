@@ -26,6 +26,7 @@ public class TransactionHistory implements Serializable {
     private Long statusId;
     private LocalDateTime createdAt;
     private String description;
+    private String terminalCode;
 
     public TransactionHistory() {}
 
@@ -39,6 +40,7 @@ public class TransactionHistory implements Serializable {
         this.statusId = value.statusId;
         this.createdAt = value.createdAt;
         this.description = value.description;
+        this.terminalCode = value.terminalCode;
     }
 
     public TransactionHistory(
@@ -50,7 +52,8 @@ public class TransactionHistory implements Serializable {
         Long typeId,
         Long statusId,
         LocalDateTime createdAt,
-        String description
+        String description,
+        String terminalCode
     ) {
         this.id = id;
         this.fromAccountId = fromAccountId;
@@ -61,6 +64,7 @@ public class TransactionHistory implements Serializable {
         this.statusId = statusId;
         this.createdAt = createdAt;
         this.description = description;
+        this.terminalCode = terminalCode;
     }
 
     /**
@@ -200,6 +204,21 @@ public class TransactionHistory implements Serializable {
         return this;
     }
 
+    /**
+     * Getter for <code>money_transfer.transaction_history.terminal_code</code>.
+     */
+    public String getTerminalCode() {
+        return this.terminalCode;
+    }
+
+    /**
+     * Setter for <code>money_transfer.transaction_history.terminal_code</code>.
+     */
+    public TransactionHistory setTerminalCode(String terminalCode) {
+        this.terminalCode = terminalCode;
+        return this;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -239,6 +258,7 @@ public class TransactionHistory implements Serializable {
         sb.append(", ").append(statusId);
         sb.append(", ").append(createdAt);
         sb.append(", ").append(description);
+        sb.append(", ").append(terminalCode);
 
         sb.append(")");
         return sb.toString();

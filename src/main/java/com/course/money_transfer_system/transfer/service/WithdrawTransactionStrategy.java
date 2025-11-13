@@ -25,19 +25,21 @@ public class WithdrawTransactionStrategy implements TransactionStrategy {
     }
 
     public void transaction(TransactionDto dto){
-        checkBalance(dto.getAccountNumberFrom(), dto.getAmount());
+        checkBalance(dto.getNumberFrom(), dto.getAmount());
         transactionRepository.transactionSubtract(dto);
 
         transactionRepository.transactionHistoryInsert(
                 new TransactionHistory(null,
-                        getAccountId(dto.getAccountNumberFrom()),
-                        getAccountId(dto.getAccountNumberTo()),
+                        getAccountId(dto.getNumberFrom()),
+                        null,
                         dto.getAmount(),
                         "RUB",
                         TransactionType.TRANSFER.getTransactionTypeId(),
                         TransactionStatus.SUCCESS.getTransactionStatusId(),
                         LocalDateTime.now(),
-                        TransactionType.TRANSFER.getDescription())
+                        TransactionType.TRANSFER.getDescription(),
+                        null
+                )
         );
     }
 

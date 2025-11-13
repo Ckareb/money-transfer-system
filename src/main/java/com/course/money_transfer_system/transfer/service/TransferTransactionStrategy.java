@@ -25,20 +25,22 @@ public class TransferTransactionStrategy implements TransactionStrategy {
     }
 
     public void transaction(TransactionDto dto){
-        checkBalance(dto.getAccountNumberFrom(), dto.getAmount());
+        checkBalance(dto.getNumberFrom(), dto.getAmount());
         transactionRepository.transactionSubtract(dto);
         transactionRepository.transactionAdd(dto);
 
         transactionRepository.transactionHistoryInsert(
                 new TransactionHistory(null,
-                        getAccountId(dto.getAccountNumberFrom()),
-                        getAccountId(dto.getAccountNumberTo()),
+                        getAccountId(dto.getNumberFrom()),
+                        getAccountId(dto.getNumberTo()),
                         dto.getAmount(),
                         "RUB",
                         TransactionType.TRANSFER.getTransactionTypeId(),
                         TransactionStatus.SUCCESS.getTransactionStatusId(),
                         LocalDateTime.now(),
-                        TransactionType.TRANSFER.getDescription())
+                        TransactionType.TRANSFER.getDescription(),
+                        null
+                )
         );
     }
 

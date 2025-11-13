@@ -25,27 +25,30 @@ public class DepositTransactionStrategy implements TransactionStrategy {
     }
 
     public void transaction(TransactionDto dto){
-        checkBalance(dto.getAccountNumberFrom(), dto.getAmount());
+        //checkBalance(dto.getNumberFrom(), dto.getAmount());
         transactionRepository.transactionAdd(dto);
 
         transactionRepository.transactionHistoryInsert(
                 new TransactionHistory(null,
-                        getAccountId(dto.getAccountNumberFrom()),
-                        getAccountId(dto.getAccountNumberTo()),
+                        null,
+                        getAccountId(dto.getNumberTo()),
                         dto.getAmount(),
                         "RUB",
                         TransactionType.TRANSFER.getTransactionTypeId(),
                         TransactionStatus.SUCCESS.getTransactionStatusId(),
                         LocalDateTime.now(),
-                        TransactionType.TRANSFER.getDescription())
+                        TransactionType.TRANSFER.getDescription(),
+                        dto.getNumberFrom()
+                )
         );
     }
 
     public void checkBalance(String accountNumber, BigDecimal amount){
-        if (!transactionRepository.balanceCheck(accountNumber, amount)){
-            //TODO исключение
-            System.out.println("Не достаточно средств на счете");
-        }
+//        //TODO исключение
+//        if (!transactionRepository.balanceCheck(accountNumber, amount)){
+//
+//            System.out.println("Не достаточно средств на счете");
+//        }
     }
 
     private Long getAccountId(String accountNumber){

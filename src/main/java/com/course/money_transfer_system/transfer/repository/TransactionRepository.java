@@ -10,7 +10,6 @@ import java.math.BigDecimal;
 
 import static jooq.money_transfer.Tables.ACCOUNT;
 import static jooq.money_transfer.Tables.TRANSACTION_HISTORY;
-import static org.jooq.impl.DSL.selectOne;
 
 @Repository
 public class TransactionRepository {
