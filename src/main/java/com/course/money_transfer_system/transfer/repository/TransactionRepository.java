@@ -26,14 +26,14 @@ public class TransactionRepository {
     public void transactionSubtract(TransactionDto dto){
         dsl.update(ACCOUNT)
                 .set(ACCOUNT.BALANCE, ACCOUNT.BALANCE.subtract(dto.getAmount()))
-                .where(ACCOUNT.ACCOUNT_NUMBER.eq(dto.getAccountNumberFrom().toUpperCase()))
+                .where(ACCOUNT.ACCOUNT_NUMBER.eq(dto.getNumberFrom().toUpperCase()))
                 .execute();;
     }
 
     public void transactionAdd(TransactionDto dto){
         dsl.update(ACCOUNT)
                 .set(ACCOUNT.BALANCE, ACCOUNT.BALANCE.add(dto.getAmount()))
-                .where(ACCOUNT.ACCOUNT_NUMBER.eq(dto.getAccountNumberTo().toUpperCase()))
+                .where(ACCOUNT.ACCOUNT_NUMBER.eq(dto.getNumberTo().toUpperCase()))
                 .execute();;
     }
 
