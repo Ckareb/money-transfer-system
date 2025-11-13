@@ -21,6 +21,7 @@ public class TransactionService {
     public void transaction(TransactionDto dto) {
         TransactionStrategy strategy = strategies.get(dto.getTypeId());
         if (strategy == null) {
+            //TODO исключение
             throw new RuntimeException("Стратегии с данным id " + dto.getTypeId() + " не существует");
         }
         strategy.transaction(dto);

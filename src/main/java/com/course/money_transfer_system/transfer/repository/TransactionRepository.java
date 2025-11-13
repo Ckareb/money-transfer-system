@@ -54,12 +54,6 @@ public class TransactionRepository {
 
         BigDecimal newBalance = balance.subtract(amount);
 
-        if (newBalance == null) {
-            //TODO исключение
-            System.out.println("Счёт не найден: " + accountNumber);
-            return false;
-        }
-
         return newBalance.compareTo(BigDecimal.ZERO) >= 0;
     }
 }
