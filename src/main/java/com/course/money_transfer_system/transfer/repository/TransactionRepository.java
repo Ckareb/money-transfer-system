@@ -40,7 +40,13 @@ public class TransactionRepository {
     public void transactionHistoryInsert(TransactionHistory history){
         dsl.insertInto(TRANSACTION_HISTORY)
                 .set(dsl.newRecord(TRANSACTION_HISTORY, history))
-                .execute();;
+                .execute();
+    }
+
+    public void transactionHistoryChangeStatus(Long statusId){
+        dsl.update(TRANSACTION_HISTORY)
+                .set(TRANSACTION_HISTORY.STATUS_ID, statusId)
+                .execute();
     }
 
     public boolean balanceCheck(String accountNumber, BigDecimal amount){

@@ -7,6 +7,7 @@ import com.course.money_transfer_system.transfer.ref.TransactionType;
 import com.course.money_transfer_system.transfer.repository.TransactionRepository;
 import com.course.money_transfer_system.transfer.strategy.TransactionStrategy;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -24,10 +25,18 @@ public class DepositTransactionStrategy implements TransactionStrategy {
         return TransactionType.DEPOSIT.getTransactionTypeId();
     }
 
+    @Override
+    @Transactional
     public void transaction(TransactionDto dto){
+        transactionHistoryInsert(dto);
         //checkBalance(dto.getNumberFrom(), dto.getAmount());
         transactionRepository.transactionAdd(dto);
 
+        transactionHistoryChangeStatus(TransactionStatus.SUCCESS.getTransactionStatusId());
+    }
+    @Override
+    @Transactional
+    public void transactionHistoryInsert(TransactionDto dto) {
         transactionRepository.transactionHistoryInsert(
                 new TransactionHistory(null,
                         null,
@@ -43,7 +52,14 @@ public class DepositTransactionStrategy implements TransactionStrategy {
         );
     }
 
-    public void checkBalance(String accountNumber, BigDecimal amount){
+    @Override
+    @Transactional
+    public void transactionHistoryChangeStatus(Long id) {
+        transactionRepository.transactionHistoryChangeStatus(id);
+    }
+
+    @Transactional
+    private void checkBalance(String accountNumber, BigDecimal amount){
 //        //TODO исключение
 //        if (!transactionRepository.balanceCheck(accountNumber, amount)){
 //
@@ -51,6 +67,7 @@ public class DepositTransactionStrategy implements TransactionStrategy {
 //        }
     }
 
+    @Transactional
     private Long getAccountId(String accountNumber){
         return transactionRepository.getAccountId(accountNumber);
     }
