@@ -88,7 +88,7 @@ public class TransactionHistory extends TableImpl<TransactionHistoryRecord> {
     /**
      * The column <code>money_transfer.transaction_history.currency</code>.
      */
-    public final TableField<TransactionHistoryRecord, Long> CURRENCY = createField(DSL.name("currency"), SQLDataType.BIGINT, this, "");
+    public final TableField<TransactionHistoryRecord, Long> CURRENCY = createField(DSL.name("currency"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>money_transfer.transaction_history.type_id</code>.

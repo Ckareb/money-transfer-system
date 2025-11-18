@@ -81,7 +81,7 @@ public class Account extends TableImpl<AccountRecord> {
     /**
      * The column <code>money_transfer.account.currency</code>.
      */
-    public final TableField<AccountRecord, Long> CURRENCY = createField(DSL.name("currency"), SQLDataType.BIGINT, this, "");
+    public final TableField<AccountRecord, Long> CURRENCY = createField(DSL.name("currency"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>money_transfer.account.balance</code>.
