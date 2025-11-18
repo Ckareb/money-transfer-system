@@ -39,6 +39,7 @@ public class WithdrawTransactionStrategy implements TransactionStrategy {
                 dto.getNumberTo()
                 );
         checkBalance(dto.getNumberFrom(), dto.getAmount());
+
         transactionRepository.transactionSubtract(dto);
         transactionHistoryService.transactionHistoryChangeStatus(TransactionStatus.SUCCESS.getTransactionStatusId());
     }

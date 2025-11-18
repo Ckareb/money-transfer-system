@@ -34,17 +34,9 @@ public class DepositTransactionStrategy implements TransactionStrategy {
                 TransactionType.DEPOSIT,
                 dto.getNumberFrom()
         );
-        //checkBalance(dto.getNumberFrom(), dto.getAmount());
+
         transactionRepository.transactionAdd(dto);
 
         transactionHistoryService.transactionHistoryChangeStatus(TransactionStatus.SUCCESS.getTransactionStatusId());
     }
-
-//    private void checkBalance(String accountNumber, BigDecimal amount){
-//        //TODO исключение
-//        if (!transactionRepository.balanceCheck(accountNumber, amount)){
-//
-//            System.out.println("Не достаточно средств на счете");
-//        }
-//    }
 }

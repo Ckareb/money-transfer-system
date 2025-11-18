@@ -36,7 +36,9 @@ public class TransferTransactionStrategy implements TransactionStrategy {
                 TransactionType.TRANSFER,
                 null
         );
+
         checkBalance(dto.getNumberFrom(), dto.getAmount());
+
         transactionRepository.transactionSubtract(dto);
         transactionRepository.transactionAdd(dto);
         transactionHistoryService.transactionHistoryChangeStatus(TransactionStatus.SUCCESS.getTransactionStatusId());

@@ -52,9 +52,10 @@ public class TransactionHistoryService {
 
 
     public Long getAccountId(String accountNumber) {
+        Long accountId = accountService.getAccountId(accountNumber);
         //TODO Сделать исключение
-        if (accountNumber == null)
+        if (accountId == null)
             return null;
-        return accountService.getAccountId(accountNumber);
+        return accountId;
     }
 }
