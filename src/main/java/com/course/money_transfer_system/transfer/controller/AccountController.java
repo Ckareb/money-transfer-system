@@ -2,7 +2,7 @@ package com.course.money_transfer_system.transfer.controller;
 
 import com.course.money_transfer_system.transfer.dto.AccountDto;
 import com.course.money_transfer_system.transfer.dto.TransactionDto;
-import com.course.money_transfer_system.transfer.dto.TransactionTypeDto;
+import com.course.money_transfer_system.transfer.dto.EnumDto;
 import com.course.money_transfer_system.transfer.service.AccountService;
 import com.course.money_transfer_system.transfer.service.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -50,10 +50,16 @@ public class AccountController {
         return  accountService.changeAccount(dto);
     }
 
-    @Operation(summary = "Просмотр всех счетов аккаунта")
+    @Operation(summary = "Просмотр доступных типов операции")
     @GetMapping(path = "/transfer-type")
-    public List<TransactionTypeDto> getTransactionType() {
+    public List<EnumDto> getTransactionType() {
         return  accountService.getTransactionType();
+    }
+
+    @Operation(summary = "Просмотр доступных типов валюты")
+    @GetMapping(path = "/currency-type")
+    public List<EnumDto> getCurrencyType() {
+        return  accountService.getCurrencyType();
     }
 
     @Operation(summary = "Удаление счета")
@@ -62,7 +68,7 @@ public class AccountController {
         return  accountService.deleteAccount(id);
     }
 
-    @Operation(summary = "Изменение данных счета")
+    @Operation(summary = "Изменение баланса счета")
     @PutMapping(path = "/change/balance")
     public void changeBalance(@RequestBody TransactionDto dto) {
         transactionService.transaction(dto);

@@ -16,9 +16,12 @@ import java.time.LocalDateTime;
 public class WithdrawTransactionStrategy implements TransactionStrategy {
 
     private final TransactionRepository transactionRepository;
+    private final TransactionHistoryService transactionHistoryService;
 
-    public WithdrawTransactionStrategy(TransactionRepository transactionRepository) {
+    public WithdrawTransactionStrategy(TransactionRepository transactionRepository,
+                                       TransactionHistoryService transactionHistoryService) {
         this.transactionRepository = transactionRepository;
+        this.transactionHistoryService = transactionHistoryService;
     }
 
     public Long getTransactionTypeId(){
@@ -28,46 +31,23 @@ public class WithdrawTransactionStrategy implements TransactionStrategy {
     @Override
     @Transactional
     public void transaction(TransactionDto dto){
-        transactionHistoryInsert(dto);
+        transactionHistoryService.createTransactionHistory(
+                dto,
+                transactionHistoryService.getAccountId(dto.getNumberFrom()),
+                null,
+                TransactionType.WITHDRAW,
+                dto.getNumberTo()
+                );
         checkBalance(dto.getNumberFrom(), dto.getAmount());
         transactionRepository.transactionSubtract(dto);
-        transactionHistoryChangeStatus(TransactionStatus.SUCCESS.getTransactionStatusId());
+        transactionHistoryService.transactionHistoryChangeStatus(TransactionStatus.SUCCESS.getTransactionStatusId());
     }
 
-    @Override
-    @Transactional
-    public void transactionHistoryInsert(TransactionDto dto) {
-        transactionRepository.transactionHistoryInsert(
-                new TransactionHistory(null,
-                        getAccountId(dto.getNumberFrom()),
-                        null,
-                        dto.getAmount(),
-                        "RUB",
-                        TransactionType.TRANSFER.getTransactionTypeId(),
-                        TransactionStatus.SUCCESS.getTransactionStatusId(),
-                        LocalDateTime.now(),
-                        TransactionType.TRANSFER.getDescription(),
-                        null
-                )
-        );
-    }
 
-    @Override
-    @Transactional
-    public void transactionHistoryChangeStatus(Long id) {
-        transactionRepository.transactionHistoryChangeStatus(id);
-    }
-
-    @Transactional
     private void checkBalance(String accountNumber, BigDecimal amount){
         if (!transactionRepository.balanceCheck(accountNumber, amount)){
             //TODO исключение
             System.out.println("Не достаточно средств на счете");
         }
-    }
-
-    @Transactional
-    private Long getAccountId(String accountNumber){
-        return transactionRepository.getAccountId(accountNumber);
     }
 }

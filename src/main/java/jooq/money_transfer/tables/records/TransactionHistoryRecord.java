@@ -86,7 +86,7 @@ public class TransactionHistoryRecord extends UpdatableRecordImpl<TransactionHis
     /**
      * Setter for <code>money_transfer.transaction_history.currency</code>.
      */
-    public TransactionHistoryRecord setCurrency(String value) {
+    public TransactionHistoryRecord setCurrency(Long value) {
         set(4, value);
         return this;
     }
@@ -94,8 +94,8 @@ public class TransactionHistoryRecord extends UpdatableRecordImpl<TransactionHis
     /**
      * Getter for <code>money_transfer.transaction_history.currency</code>.
      */
-    public String getCurrency() {
-        return (String) get(4);
+    public Long getCurrency() {
+        return (Long) get(4);
     }
 
     /**
@@ -196,7 +196,7 @@ public class TransactionHistoryRecord extends UpdatableRecordImpl<TransactionHis
     /**
      * Create a detached, initialised TransactionHistoryRecord
      */
-    public TransactionHistoryRecord(Long id, Long fromAccountId, Long toAccountId, BigDecimal amount, String currency, Long typeId, Long statusId, LocalDateTime createdAt, String description, String terminalCode) {
+    public TransactionHistoryRecord(Long id, Long fromAccountId, Long toAccountId, BigDecimal amount, Long currency, Long typeId, Long statusId, LocalDateTime createdAt, String description, String terminalCode) {
         super(TransactionHistory.TRANSACTION_HISTORY);
 
         setId(id);

@@ -9,6 +9,7 @@ import java.util.List;
 
 import jooq.DefaultCatalog;
 import jooq.money_transfer.tables.Account;
+import jooq.money_transfer.tables.CurrencyType;
 import jooq.money_transfer.tables.TransactionHistory;
 import jooq.money_transfer.tables.TransactionStatus;
 import jooq.money_transfer.tables.TransactionType;
@@ -37,6 +38,11 @@ public class MoneyTransfer extends SchemaImpl {
      * The table <code>money_transfer.account</code>.
      */
     public final Account ACCOUNT = Account.ACCOUNT;
+
+    /**
+     * The table <code>money_transfer.currency_type</code>.
+     */
+    public final CurrencyType CURRENCY_TYPE = CurrencyType.CURRENCY_TYPE;
 
     /**
      * The table <code>money_transfer.transaction_history</code>.
@@ -77,6 +83,7 @@ public class MoneyTransfer extends SchemaImpl {
     public final List<Table<?>> getTables() {
         return Arrays.asList(
             Account.ACCOUNT,
+            CurrencyType.CURRENCY_TYPE,
             TransactionHistory.TRANSACTION_HISTORY,
             TransactionStatus.TRANSACTION_STATUS,
             TransactionType.TRANSACTION_TYPE

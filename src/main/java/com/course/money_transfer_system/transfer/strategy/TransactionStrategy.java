@@ -8,6 +8,6 @@ public interface TransactionStrategy {
     Long getTransactionTypeId();
     void transaction(TransactionDto dto);
     //void checkBalance(String accountNumber, BigDecimal amount);
-    void transactionHistoryInsert(TransactionDto dto);
-    void transactionHistoryChangeStatus(Long id);
+    //void transactionHistoryInsert(TransactionDto dto);
+    //void transactionHistoryChangeStatus(Long id);
 }

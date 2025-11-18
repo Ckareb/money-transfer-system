@@ -3,12 +3,14 @@ package com.course.money_transfer_system.transfer.service;
 import com.course.money_transfer_system.transfer.dto.AccountDto;
 import com.course.money_transfer_system.transfer.mapper.AccountMapper;
 import com.course.money_transfer_system.transfer.model.Account;
-import com.course.money_transfer_system.transfer.dto.TransactionTypeDto;
+import com.course.money_transfer_system.transfer.dto.EnumDto;
+import com.course.money_transfer_system.transfer.ref.CurrencyType;
 import com.course.money_transfer_system.transfer.ref.TransactionType;
 import com.course.money_transfer_system.transfer.repository.AccountRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -51,6 +53,7 @@ public class AccountService {
      * @param dto банковского счета
      * @return банковский счет
      */
+    @Transactional
     public AccountDto createAccount(AccountDto dto) {
         // TODO Проверка доступа и исключения
         checkDto(dto);
@@ -67,6 +70,7 @@ public class AccountService {
      * @param dto Id банковского счета
      * @return банковский счет
      */
+    @Transactional
     public AccountDto changeAccount(AccountDto dto) {
         // TODO Проверка доступа и исключения
         if (checkExistAccount(dto.getId())) {
@@ -88,6 +92,7 @@ public class AccountService {
      * @param id Id банковского счета
      * @return статус удаления
      */
+    @Transactional
     public ResponseEntity<String> deleteAccount(Long id) {
         // TODO Проверка доступа и исключения
         if (checkExistAccount(id)) {
@@ -129,9 +134,18 @@ public class AccountService {
      * Получает типы транзакций
      * @return типы транзакций
      */
-    public List<TransactionTypeDto> getTransactionType() {
+    public List<EnumDto> getTransactionType() {
         // TODO Проверка доступа
-        return Arrays.stream(TransactionType.values()).map(TransactionType::getTransactionDto).toList();
+        return Arrays.stream(TransactionType.values()).map(TransactionType::getEnumDto).toList();
+    }
+
+    /**
+     * Получает тип валюты
+     * @return тип валюты
+     */
+    public List<EnumDto> getCurrencyType() {
+        // TODO Проверка доступа
+        return Arrays.stream(CurrencyType.values()).map(CurrencyType::getEnumDto).toList();
     }
 
     /**
@@ -159,6 +173,15 @@ public class AccountService {
      */
     private boolean checkUserAccount(Long id) {
         return accountRepository.existUser(id);
+    }
+
+    /**
+     * Получает id пользователя
+     * @param accountNumber номер аккаунта
+     * @return id пользователя
+     */
+    protected Long getAccountId(String accountNumber){
+        return accountRepository.getAccountId(accountNumber);
     }
 
 }

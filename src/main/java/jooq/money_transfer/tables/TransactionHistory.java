@@ -13,6 +13,7 @@ import java.util.List;
 import jooq.money_transfer.Keys;
 import jooq.money_transfer.MoneyTransfer;
 import jooq.money_transfer.tables.Account.AccountPath;
+import jooq.money_transfer.tables.CurrencyType.CurrencyTypePath;
 import jooq.money_transfer.tables.TransactionStatus.TransactionStatusPath;
 import jooq.money_transfer.tables.TransactionType.TransactionTypePath;
 import jooq.money_transfer.tables.records.TransactionHistoryRecord;
@@ -87,7 +88,7 @@ public class TransactionHistory extends TableImpl<TransactionHistoryRecord> {
     /**
      * The column <code>money_transfer.transaction_history.currency</code>.
      */
-    public final TableField<TransactionHistoryRecord, String> CURRENCY = createField(DSL.name("currency"), SQLDataType.VARCHAR(10).nullable(false), this, "");
+    public final TableField<TransactionHistoryRecord, Long> CURRENCY = createField(DSL.name("currency"), SQLDataType.BIGINT, this, "");
 
     /**
      * The column <code>money_transfer.transaction_history.type_id</code>.
@@ -195,7 +196,20 @@ public class TransactionHistory extends TableImpl<TransactionHistoryRecord> {
 
     @Override
     public List<ForeignKey<TransactionHistoryRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.TRANSACTION_HISTORY__FROM_ACCOUNT_FK, Keys.TRANSACTION_HISTORY__TO_ACCOUNT_FK, Keys.TRANSACTION_HISTORY__TRANSACTION_STATUS_FK, Keys.TRANSACTION_HISTORY__TRANSACTION_TYPE_FK);
+        return Arrays.asList(Keys.TRANSACTION_HISTORY__CURRENCY_TYPE_FK, Keys.TRANSACTION_HISTORY__FROM_ACCOUNT_FK, Keys.TRANSACTION_HISTORY__TO_ACCOUNT_FK, Keys.TRANSACTION_HISTORY__TRANSACTION_STATUS_FK, Keys.TRANSACTION_HISTORY__TRANSACTION_TYPE_FK);
+    }
+
+    private transient CurrencyTypePath _currencyType;
+
+    /**
+     * Get the implicit join path to the
+     * <code>money_transfer.currency_type</code> table.
+     */
+    public CurrencyTypePath currencyType() {
+        if (_currencyType == null)
+            _currencyType = new CurrencyTypePath(this, Keys.TRANSACTION_HISTORY__CURRENCY_TYPE_FK, null);
+
+        return _currencyType;
     }
 
     private transient AccountPath _fromAccountFk;

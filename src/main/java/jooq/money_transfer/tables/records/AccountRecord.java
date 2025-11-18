@@ -69,7 +69,7 @@ public class AccountRecord extends UpdatableRecordImpl<AccountRecord> {
     /**
      * Setter for <code>money_transfer.account.currency</code>.
      */
-    public AccountRecord setCurrency(String value) {
+    public AccountRecord setCurrency(Long value) {
         set(3, value);
         return this;
     }
@@ -77,8 +77,8 @@ public class AccountRecord extends UpdatableRecordImpl<AccountRecord> {
     /**
      * Getter for <code>money_transfer.account.currency</code>.
      */
-    public String getCurrency() {
-        return (String) get(3);
+    public Long getCurrency() {
+        return (Long) get(3);
     }
 
     /**
@@ -134,7 +134,7 @@ public class AccountRecord extends UpdatableRecordImpl<AccountRecord> {
     /**
      * Create a detached, initialised AccountRecord
      */
-    public AccountRecord(Long id, Long userAccountId, String accountNumber, String currency, BigDecimal balance, LocalDateTime createdAt) {
+    public AccountRecord(Long id, Long userAccountId, String accountNumber, Long currency, BigDecimal balance, LocalDateTime createdAt) {
         super(Account.ACCOUNT);
 
         setId(id);

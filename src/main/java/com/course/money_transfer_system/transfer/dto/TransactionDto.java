@@ -10,4 +10,5 @@ public class TransactionDto {
     private String numberFrom;
     private String numberTo;
     private BigDecimal amount;
+    private Long currencyId;
 }

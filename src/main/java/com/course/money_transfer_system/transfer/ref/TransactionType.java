@@ -1,6 +1,6 @@
 package com.course.money_transfer_system.transfer.ref;
 
-import com.course.money_transfer_system.transfer.dto.TransactionTypeDto;
+import com.course.money_transfer_system.transfer.dto.EnumDto;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,7 +41,7 @@ public enum TransactionType {
         }
     }
 
-    public TransactionTypeDto getTransactionDto(){
-        return new TransactionTypeDto(this.id, this.name, this.description);
+    public EnumDto getEnumDto(){
+        return new EnumDto(this.id, this.name, this.description);
     }
 }

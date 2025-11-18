@@ -20,7 +20,7 @@ public class Account implements Serializable {
     private Long id;
     private Long userAccountId;
     private String accountNumber;
-    private String currency;
+    private Long currency;
     private BigDecimal balance;
     private LocalDateTime createdAt;
 
@@ -39,7 +39,7 @@ public class Account implements Serializable {
         Long id,
         Long userAccountId,
         String accountNumber,
-        String currency,
+        Long currency,
         BigDecimal balance,
         LocalDateTime createdAt
     ) {
@@ -99,14 +99,14 @@ public class Account implements Serializable {
     /**
      * Getter for <code>money_transfer.account.currency</code>.
      */
-    public String getCurrency() {
+    public Long getCurrency() {
         return this.currency;
     }
 
     /**
      * Setter for <code>money_transfer.account.currency</code>.
      */
-    public Account setCurrency(String currency) {
+    public Account setCurrency(Long currency) {
         this.currency = currency;
         return this;
     }

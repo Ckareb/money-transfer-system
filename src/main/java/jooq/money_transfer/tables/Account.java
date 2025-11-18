@@ -13,6 +13,7 @@ import java.util.List;
 import jooq.auth.tables.UserAccount.UserAccountPath;
 import jooq.money_transfer.Keys;
 import jooq.money_transfer.MoneyTransfer;
+import jooq.money_transfer.tables.CurrencyType.CurrencyTypePath;
 import jooq.money_transfer.tables.TransactionHistory.TransactionHistoryPath;
 import jooq.money_transfer.tables.records.AccountRecord;
 
@@ -80,7 +81,7 @@ public class Account extends TableImpl<AccountRecord> {
     /**
      * The column <code>money_transfer.account.currency</code>.
      */
-    public final TableField<AccountRecord, String> CURRENCY = createField(DSL.name("currency"), SQLDataType.VARCHAR(10).nullable(false), this, "");
+    public final TableField<AccountRecord, Long> CURRENCY = createField(DSL.name("currency"), SQLDataType.BIGINT, this, "");
 
     /**
      * The column <code>money_transfer.account.balance</code>.
@@ -176,7 +177,20 @@ public class Account extends TableImpl<AccountRecord> {
 
     @Override
     public List<ForeignKey<AccountRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.ACCOUNT__USER_ACCOUNT_FK1);
+        return Arrays.asList(Keys.ACCOUNT__CURRENCY_TYPE_FK, Keys.ACCOUNT__USER_ACCOUNT_FK1);
+    }
+
+    private transient CurrencyTypePath _currencyType;
+
+    /**
+     * Get the implicit join path to the
+     * <code>money_transfer.currency_type</code> table.
+     */
+    public CurrencyTypePath currencyType() {
+        if (_currencyType == null)
+            _currencyType = new CurrencyTypePath(this, Keys.ACCOUNT__CURRENCY_TYPE_FK, null);
+
+        return _currencyType;
     }
 
     private transient UserAccountPath _userAccount;

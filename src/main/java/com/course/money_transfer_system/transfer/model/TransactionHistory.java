@@ -11,7 +11,7 @@ public class TransactionHistory {
     private Long fromAccountId;
     private Long toAccountId;
     private BigDecimal amount;
-    private String currency;
+    private Long currency;
     private Long typeId;
     private Long statusId;
     private LocalDateTime createdAt;
@@ -22,7 +22,7 @@ public class TransactionHistory {
                               Long fromAccountId,
                               Long toAccountId,
                               BigDecimal amount,
-                              String currency,
+                              Long currency,
                               Long typeId,
                               Long statusId,
                               LocalDateTime createdAt,

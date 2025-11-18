@@ -16,13 +16,6 @@ public class TransactionRepository {
     @Autowired
     private DSLContext dsl;
 
-    public Long getAccountId(String accountNumber){
-        return dsl.select(ACCOUNT.ID)
-                        .from(ACCOUNT)
-                        .where(ACCOUNT.ACCOUNT_NUMBER.eq(accountNumber.toUpperCase()))
-                        .fetchOneInto(Long.class);
-    }
-
     public void transactionSubtract(TransactionDto dto){
         dsl.update(ACCOUNT)
                 .set(ACCOUNT.BALANCE, ACCOUNT.BALANCE.subtract(dto.getAmount()))
@@ -54,6 +47,7 @@ public class TransactionRepository {
                 .from(ACCOUNT)
                 .where(ACCOUNT.ACCOUNT_NUMBER.eq(accountNumber.toUpperCase()))
                 .fetchOneInto(BigDecimal.class);
+
         if (amount == null || balance == null)
             return false;
 

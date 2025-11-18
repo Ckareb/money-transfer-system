@@ -18,7 +18,7 @@ public class Account {
     private String accountNumber;
 
     @Schema(description = "валюта")
-    private String currency;
+    private Long currency;
 
     @Schema(description = "баланс")
     private BigDecimal balance;

@@ -3,11 +3,11 @@ package com.course.money_transfer_system.transfer.repository;
 
 import com.course.money_transfer_system.transfer.dto.AccountDto;
 import com.course.money_transfer_system.transfer.model.Account;
+import com.course.money_transfer_system.transfer.ref.CurrencyType;
 import com.course.money_transfer_system.transfer.ref.TransactionStatus;
 import com.course.money_transfer_system.transfer.ref.TransactionType;
 import jakarta.annotation.PostConstruct;
 import org.jooq.DSLContext;
-import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -28,14 +28,21 @@ public class AccountRepository {
     private void fillTransactionType() {
         dsl.selectFrom(TRANSACTION_TYPE).where(TRANSACTION_TYPE.TYPE_CODE.isNotNull())
                 .fetch().forEach(r -> TransactionType.fill(r.getId(), r.getTypeCode(), r.getDescription(), r.getName()));
-        log.info("TransactionType add in project");
+        log.info("Transaction Type add in project");
     }
 
     @PostConstruct
     private void fillTransactionStatus() {
         dsl.selectFrom(TRANSACTION_STATUS).where(TRANSACTION_STATUS.STATUS_CODE.isNotNull())
                 .fetch().forEach(r -> TransactionStatus.fill(r.getId(), r.getStatusCode(), r.getDescription()));
-        log.info("TransactionStatus add in project");
+        log.info("Transaction Status add in project");
+    }
+
+    @PostConstruct
+    private void fillCurrencyType() {
+        dsl.selectFrom(CURRENCY_TYPE).where(CURRENCY_TYPE.CURRENCY_CODE.isNotNull())
+                .fetch().forEach(r -> CurrencyType.fill(r.getId(), r.getCurrencyCode(), r.getDescription()));
+        log.info("Currency add in project");
     }
 
     public List<AccountDto> getAccounts(Long id){
@@ -105,5 +112,13 @@ public class AccountRepository {
                         .from(USER_ACCOUNT)
                         .where(USER_ACCOUNT.ID.eq(id))
         );
+    }
+
+
+    public Long getAccountId(String accountNumber){
+        return dsl.select(ACCOUNT.ID)
+                .from(ACCOUNT)
+                .where(ACCOUNT.ACCOUNT_NUMBER.eq(accountNumber.toUpperCase()))
+                .fetchOneInto(Long.class);
     }
 }

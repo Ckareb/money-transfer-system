@@ -21,7 +21,7 @@ public class TransactionHistory implements Serializable {
     private Long fromAccountId;
     private Long toAccountId;
     private BigDecimal amount;
-    private String currency;
+    private Long currency;
     private Long typeId;
     private Long statusId;
     private LocalDateTime createdAt;
@@ -48,7 +48,7 @@ public class TransactionHistory implements Serializable {
         Long fromAccountId,
         Long toAccountId,
         BigDecimal amount,
-        String currency,
+        Long currency,
         Long typeId,
         Long statusId,
         LocalDateTime createdAt,
@@ -132,14 +132,14 @@ public class TransactionHistory implements Serializable {
     /**
      * Getter for <code>money_transfer.transaction_history.currency</code>.
      */
-    public String getCurrency() {
+    public Long getCurrency() {
         return this.currency;
     }
 
     /**
      * Setter for <code>money_transfer.transaction_history.currency</code>.
      */
-    public TransactionHistory setCurrency(String currency) {
+    public TransactionHistory setCurrency(Long currency) {
         this.currency = currency;
         return this;
     }
