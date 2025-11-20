@@ -63,6 +63,21 @@ public class CurrencyTypeRecord extends UpdatableRecordImpl<CurrencyTypeRecord> 
         return (String) get(2);
     }
 
+    /**
+     * Setter for <code>money_transfer.currency_type.name</code>.
+     */
+    public CurrencyTypeRecord setName(String value) {
+        set(3, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>money_transfer.currency_type.name</code>.
+     */
+    public String getName() {
+        return (String) get(3);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -86,12 +101,13 @@ public class CurrencyTypeRecord extends UpdatableRecordImpl<CurrencyTypeRecord> 
     /**
      * Create a detached, initialised CurrencyTypeRecord
      */
-    public CurrencyTypeRecord(Long id, String currencyCode, String description) {
+    public CurrencyTypeRecord(Long id, String currencyCode, String description, String name) {
         super(CurrencyType.CURRENCY_TYPE);
 
         setId(id);
         setCurrencyCode(currencyCode);
         setDescription(description);
+        setName(name);
         resetTouchedOnNotNull();
     }
 
@@ -105,6 +121,7 @@ public class CurrencyTypeRecord extends UpdatableRecordImpl<CurrencyTypeRecord> 
             setId(value.getId());
             setCurrencyCode(value.getCurrencyCode());
             setDescription(value.getDescription());
+            setName(value.getName());
             resetTouchedOnNotNull();
         }
     }

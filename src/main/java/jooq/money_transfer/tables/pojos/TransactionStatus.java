@@ -18,6 +18,7 @@ public class TransactionStatus implements Serializable {
     private Long id;
     private String statusCode;
     private String description;
+    private String name;
 
     public TransactionStatus() {}
 
@@ -25,16 +26,19 @@ public class TransactionStatus implements Serializable {
         this.id = value.id;
         this.statusCode = value.statusCode;
         this.description = value.description;
+        this.name = value.name;
     }
 
     public TransactionStatus(
         Long id,
         String statusCode,
-        String description
+        String description,
+        String name
     ) {
         this.id = id;
         this.statusCode = statusCode;
         this.description = description;
+        this.name = name;
     }
 
     /**
@@ -82,6 +86,21 @@ public class TransactionStatus implements Serializable {
         return this;
     }
 
+    /**
+     * Getter for <code>money_transfer.transaction_status.name</code>.
+     */
+    public String getName() {
+        return this.name;
+    }
+
+    /**
+     * Setter for <code>money_transfer.transaction_status.name</code>.
+     */
+    public TransactionStatus setName(String name) {
+        this.name = name;
+        return this;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -115,6 +134,7 @@ public class TransactionStatus implements Serializable {
         sb.append(id);
         sb.append(", ").append(statusCode);
         sb.append(", ").append(description);
+        sb.append(", ").append(name);
 
         sb.append(")");
         return sb.toString();

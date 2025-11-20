@@ -22,6 +22,7 @@ public enum TransactionType {
     @Getter
     private String name;
 
+
     public void setTransactionTypeId(Long id) {
         if (this.id == null)
             this.id = id;

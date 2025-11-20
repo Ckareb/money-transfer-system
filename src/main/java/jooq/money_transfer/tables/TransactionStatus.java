@@ -72,6 +72,11 @@ public class TransactionStatus extends TableImpl<TransactionStatusRecord> {
      */
     public final TableField<TransactionStatusRecord, String> DESCRIPTION = createField(DSL.name("description"), SQLDataType.CLOB, this, "");
 
+    /**
+     * The column <code>money_transfer.transaction_status.name</code>.
+     */
+    public final TableField<TransactionStatusRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(20), this, "");
+
     private TransactionStatus(Name alias, Table<TransactionStatusRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }

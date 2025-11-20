@@ -18,23 +18,23 @@ public class TransactionHistoryService {
     private final AccountService accountService;
 
     @Autowired
-    public TransactionHistoryService(TransactionRepository tr,
+    public TransactionHistoryService(TransactionRepository transactionRepository,
                                      AccountService accountService) {
-        this.transactionRepository = tr;
+        this.transactionRepository = transactionRepository;
         this.accountService = accountService;
     }
 
     @Transactional
     public void createTransactionHistory(TransactionDto dto,
-                                  Long fromId,
-                                  Long toId,
+                                  String fromId,
+                                  String toId,
                                   TransactionType type,
                                   String terminalCode) {
 
         TransactionHistory history = new TransactionHistory(
                 null,
-                fromId,
-                toId,
+                fromId == null ? null : accountService.getAccountId(fromId),
+                toId == null ? null : accountService.getAccountId(toId),
                 dto.getAmount(),
                 dto.getCurrencyId(),
                 type.getTransactionTypeId(),
@@ -52,12 +52,12 @@ public class TransactionHistoryService {
         transactionRepository.transactionHistoryChangeStatus(id);
     }
 
-
-    public Long getAccountId(String accountNumber) {
-        Long accountId = accountService.getAccountId(accountNumber);
-        //TODO Сделать исключение
-        if (accountId == null)
-            return null;
-        return accountId;
-    }
+//
+//    public Long getAccountId(String accountNumber) {
+//        Long accountId = accountService.getAccountId(accountNumber);
+//        //TODO Сделать исключение
+//        if (accountId == null)
+//            return null;
+//        return accountId;
+//    }
 }

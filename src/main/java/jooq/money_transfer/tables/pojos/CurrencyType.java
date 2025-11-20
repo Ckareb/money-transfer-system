@@ -18,6 +18,7 @@ public class CurrencyType implements Serializable {
     private Long id;
     private String currencyCode;
     private String description;
+    private String name;
 
     public CurrencyType() {}
 
@@ -25,16 +26,19 @@ public class CurrencyType implements Serializable {
         this.id = value.id;
         this.currencyCode = value.currencyCode;
         this.description = value.description;
+        this.name = value.name;
     }
 
     public CurrencyType(
         Long id,
         String currencyCode,
-        String description
+        String description,
+        String name
     ) {
         this.id = id;
         this.currencyCode = currencyCode;
         this.description = description;
+        this.name = name;
     }
 
     /**
@@ -82,6 +86,21 @@ public class CurrencyType implements Serializable {
         return this;
     }
 
+    /**
+     * Getter for <code>money_transfer.currency_type.name</code>.
+     */
+    public String getName() {
+        return this.name;
+    }
+
+    /**
+     * Setter for <code>money_transfer.currency_type.name</code>.
+     */
+    public CurrencyType setName(String name) {
+        this.name = name;
+        return this;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -115,6 +134,7 @@ public class CurrencyType implements Serializable {
         sb.append(id);
         sb.append(", ").append(currencyCode);
         sb.append(", ").append(description);
+        sb.append(", ").append(name);
 
         sb.append(")");
         return sb.toString();

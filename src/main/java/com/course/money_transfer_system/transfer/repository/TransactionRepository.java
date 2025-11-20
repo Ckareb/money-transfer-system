@@ -20,14 +20,14 @@ public class TransactionRepository {
         dsl.update(ACCOUNT)
                 .set(ACCOUNT.BALANCE, ACCOUNT.BALANCE.subtract(dto.getAmount()))
                 .where(ACCOUNT.ACCOUNT_NUMBER.eq(dto.getNumberFrom().toUpperCase()))
-                .execute();;
+                .execute();
     }
 
     public void transactionAdd(TransactionDto dto){
         dsl.update(ACCOUNT)
                 .set(ACCOUNT.BALANCE, ACCOUNT.BALANCE.add(dto.getAmount()))
                 .where(ACCOUNT.ACCOUNT_NUMBER.eq(dto.getNumberTo().toUpperCase()))
-                .execute();;
+                .execute();
     }
 
     public void transactionHistoryInsert(TransactionHistory history){
@@ -48,9 +48,7 @@ public class TransactionRepository {
                 .where(ACCOUNT.ACCOUNT_NUMBER.eq(accountNumber.toUpperCase()))
                 .fetchOneInto(BigDecimal.class);
 
-        if (amount == null || balance == null)
-            return false;
-
+        //TODO balance не может быть null в БД
         BigDecimal newBalance = balance.subtract(amount);
 
         return newBalance.compareTo(BigDecimal.ZERO) >= 0;

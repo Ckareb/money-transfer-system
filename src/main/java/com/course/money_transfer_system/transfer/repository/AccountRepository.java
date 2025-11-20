@@ -34,14 +34,14 @@ public class AccountRepository {
     @PostConstruct
     private void fillTransactionStatus() {
         dsl.selectFrom(TRANSACTION_STATUS).where(TRANSACTION_STATUS.STATUS_CODE.isNotNull())
-                .fetch().forEach(r -> TransactionStatus.fill(r.getId(), r.getStatusCode(), r.getDescription()));
+                .fetch().forEach(r -> TransactionStatus.fill(r.getId(), r.getStatusCode(), r.getDescription(), r.getName()));
         log.info("Transaction Status add in project");
     }
 
     @PostConstruct
     private void fillCurrencyType() {
         dsl.selectFrom(CURRENCY_TYPE).where(CURRENCY_TYPE.CURRENCY_CODE.isNotNull())
-                .fetch().forEach(r -> CurrencyType.fill(r.getId(), r.getCurrencyCode(), r.getDescription()));
+                .fetch().forEach(r -> CurrencyType.fill(r.getId(), r.getCurrencyCode(), r.getDescription(), r.getName()));
         log.info("Currency add in project");
     }
 

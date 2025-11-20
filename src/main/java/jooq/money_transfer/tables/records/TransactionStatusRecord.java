@@ -63,6 +63,21 @@ public class TransactionStatusRecord extends UpdatableRecordImpl<TransactionStat
         return (String) get(2);
     }
 
+    /**
+     * Setter for <code>money_transfer.transaction_status.name</code>.
+     */
+    public TransactionStatusRecord setName(String value) {
+        set(3, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>money_transfer.transaction_status.name</code>.
+     */
+    public String getName() {
+        return (String) get(3);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -86,12 +101,13 @@ public class TransactionStatusRecord extends UpdatableRecordImpl<TransactionStat
     /**
      * Create a detached, initialised TransactionStatusRecord
      */
-    public TransactionStatusRecord(Long id, String statusCode, String description) {
+    public TransactionStatusRecord(Long id, String statusCode, String description, String name) {
         super(TransactionStatus.TRANSACTION_STATUS);
 
         setId(id);
         setStatusCode(statusCode);
         setDescription(description);
+        setName(name);
         resetTouchedOnNotNull();
     }
 
@@ -105,6 +121,7 @@ public class TransactionStatusRecord extends UpdatableRecordImpl<TransactionStat
             setId(value.getId());
             setStatusCode(value.getStatusCode());
             setDescription(value.getDescription());
+            setName(value.getName());
             resetTouchedOnNotNull();
         }
     }

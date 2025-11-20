@@ -13,6 +13,10 @@ public enum TransactionStatus {
 
     @Setter
     @Getter
+    private String name;
+
+    @Setter
+    @Getter
     private String description;
 
     public void setTransactionStatusId(Long id) {
@@ -25,11 +29,12 @@ public enum TransactionStatus {
         return id;
     }
 
-    public static void fill(Long id, String typeCode, String description) {
+    public static void fill(Long id, String typeCode, String description, String name) {
         TransactionStatus transactionStatus = TransactionStatus.valueOf(typeCode.toUpperCase());
         if(transactionStatus.getTransactionStatusId() == null){
             transactionStatus.setTransactionStatusId(id);
             transactionStatus.setDescription(description);
+            transactionStatus.setName(name);
         }
     }
 }

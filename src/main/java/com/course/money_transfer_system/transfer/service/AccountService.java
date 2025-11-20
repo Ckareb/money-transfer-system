@@ -4,7 +4,9 @@ import com.course.money_transfer_system.transfer.dto.AccountDto;
 import com.course.money_transfer_system.transfer.mapper.AccountMapper;
 import com.course.money_transfer_system.transfer.model.Account;
 import com.course.money_transfer_system.transfer.dto.EnumDto;
+import com.course.money_transfer_system.transfer.model.ResponseInfo;
 import com.course.money_transfer_system.transfer.ref.CurrencyType;
+import com.course.money_transfer_system.transfer.ref.TransactionStatus;
 import com.course.money_transfer_system.transfer.ref.TransactionType;
 import com.course.money_transfer_system.transfer.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,7 +97,7 @@ public class AccountService {
      * @return статус удаления
      */
     @Transactional
-    public ResponseEntity<String> deleteAccount(Long id) {
+    public ResponseEntity<ResponseInfo> deleteAccount(Long id) {
         // TODO Проверка доступа и исключения
         if (checkExistAccount(id)) {
             System.out.println("Данного договора не существует");
@@ -107,9 +109,25 @@ public class AccountService {
 
         int result = accountRepository.deleteAccount(id);
         if (result > 0) {
-            return ResponseEntity.ok("Запись удалена");
+            return new ResponseEntity<>(
+                    new ResponseInfo(
+                            "Данная позиция успешная удалена",
+                            LocalDateTime.now(),
+                            TransactionStatus.SUCCESS.getDescription(),
+                            TransactionStatus.SUCCESS.getName().toUpperCase()
+                    ),
+                    HttpStatus.OK
+            );
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Запись не найдена");
+            return new ResponseEntity<>(
+                    new ResponseInfo(
+                            "Произошла ошибка удаления ",
+                            LocalDateTime.now(),
+                            TransactionStatus.FAILED.getDescription(),
+                            TransactionStatus.FAILED.getName().toUpperCase()
+                    ),
+                    HttpStatus.NOT_FOUND
+            );
         }
     }
 

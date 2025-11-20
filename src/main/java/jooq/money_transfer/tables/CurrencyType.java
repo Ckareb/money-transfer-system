@@ -73,6 +73,11 @@ public class CurrencyType extends TableImpl<CurrencyTypeRecord> {
      */
     public final TableField<CurrencyTypeRecord, String> DESCRIPTION = createField(DSL.name("description"), SQLDataType.CLOB, this, "");
 
+    /**
+     * The column <code>money_transfer.currency_type.name</code>.
+     */
+    public final TableField<CurrencyTypeRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(20), this, "");
+
     private CurrencyType(Name alias, Table<CurrencyTypeRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }

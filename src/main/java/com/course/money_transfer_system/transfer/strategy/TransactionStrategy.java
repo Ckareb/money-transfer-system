@@ -1,12 +1,15 @@
 package com.course.money_transfer_system.transfer.strategy;
 
 import com.course.money_transfer_system.transfer.dto.TransactionDto;
+import com.course.money_transfer_system.transfer.model.ResponseInfo;
+import com.course.money_transfer_system.transfer.service.TransactionService;
+import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
 
 public interface TransactionStrategy {
     Long getTransactionTypeId();
-    void transaction(TransactionDto dto);
+    ResponseEntity<ResponseInfo> transaction(TransactionDto dto);
     //void checkBalance(String accountNumber, BigDecimal amount);
     //void transactionHistoryInsert(TransactionDto dto);
     //void transactionHistoryChangeStatus(Long id);
