@@ -2,6 +2,7 @@ package com.course.money_transfer_system.transfer.service;
 
 import com.course.money_transfer_system.transfer.dto.TransactionDto;
 import com.course.money_transfer_system.transfer.strategy.TransactionStrategy;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -12,6 +13,7 @@ import java.util.Map;
 public class TransactionService {
     private final Map<Long, TransactionStrategy> strategies = new HashMap<>();
 
+    @Autowired
     public TransactionService(List<TransactionStrategy> strategyList) {
        for (TransactionStrategy strategy : strategyList) {
            strategies.put(strategy.getTransactionTypeId(), strategy);

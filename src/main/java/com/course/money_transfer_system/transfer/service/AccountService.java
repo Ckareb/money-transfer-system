@@ -7,6 +7,7 @@ import com.course.money_transfer_system.transfer.dto.EnumDto;
 import com.course.money_transfer_system.transfer.ref.CurrencyType;
 import com.course.money_transfer_system.transfer.ref.TransactionType;
 import com.course.money_transfer_system.transfer.repository.AccountRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import java.util.List;
 public class AccountService {
     private final AccountRepository accountRepository;
 
+    @Autowired
     public AccountService(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
     }

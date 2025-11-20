@@ -5,6 +5,7 @@ import com.course.money_transfer_system.transfer.ref.TransactionStatus;
 import com.course.money_transfer_system.transfer.ref.TransactionType;
 import com.course.money_transfer_system.transfer.repository.TransactionRepository;
 import com.course.money_transfer_system.transfer.strategy.TransactionStrategy;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,7 @@ public class PaymentTransactionStrategy implements TransactionStrategy {
     private final TransactionRepository transactionRepository;
     private final TransactionHistoryService transactionHistoryService;
 
+    @Autowired
     public PaymentTransactionStrategy(TransactionRepository transactionRepository,
                                        TransactionHistoryService transactionHistoryService) {
         this.transactionRepository = transactionRepository;

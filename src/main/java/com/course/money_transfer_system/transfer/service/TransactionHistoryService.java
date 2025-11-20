@@ -5,6 +5,7 @@ import com.course.money_transfer_system.transfer.model.TransactionHistory;
 import com.course.money_transfer_system.transfer.ref.TransactionStatus;
 import com.course.money_transfer_system.transfer.ref.TransactionType;
 import com.course.money_transfer_system.transfer.repository.TransactionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,7 @@ public class TransactionHistoryService {
     private final TransactionRepository transactionRepository;
     private final AccountService accountService;
 
+    @Autowired
     public TransactionHistoryService(TransactionRepository tr,
                                      AccountService accountService) {
         this.transactionRepository = tr;
