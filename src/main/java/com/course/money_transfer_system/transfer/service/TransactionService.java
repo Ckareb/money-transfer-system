@@ -1,12 +1,12 @@
 package com.course.money_transfer_system.transfer.service;
 
+import com.course.money_transfer_system.exception.IncorrectParamException;
 import com.course.money_transfer_system.transfer.dto.TransactionDto;
 import com.course.money_transfer_system.transfer.model.ResponseInfo;
 import com.course.money_transfer_system.transfer.ref.CurrencyType;
 import com.course.money_transfer_system.transfer.ref.TransactionType;
 import com.course.money_transfer_system.transfer.repository.TransactionRepository;
 import com.course.money_transfer_system.transfer.strategy.TransactionStrategy;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +21,6 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final AccountService accountService;
 
-    @Autowired
     public TransactionService(List<TransactionStrategy> strategyList,
                               TransactionRepository transactionRepository,
                               AccountService accountService) {
@@ -43,33 +42,49 @@ public class TransactionService {
     }
 
     private void checkDto(TransactionDto dto){
-        for (TransactionType type : TransactionType.values())
-            if (dto.getTypeId() == null || !dto.getTypeId().equals(type.getTransactionTypeId()))
-                System.out.println("Не достаточно средств на счете");
+        boolean existsTransType = false;
+
+        for (TransactionType type : TransactionType.values()) {
+            if (dto.getTypeId().equals(type.getTransactionTypeId())) {
+                existsTransType = true;
+                break;
+            }
+        }
+
+        boolean existsCurrencyType = false;
+
+        for (CurrencyType type : CurrencyType.values()) {
+            if (dto.getCurrencyId().equals(type.getCurrencyTypeId())) {
+                existsCurrencyType = true;
+                break;
+            }
+        }
+
+        if (dto.getTypeId() == null || !existsTransType)
+            throw new IncorrectParamException("Не существует такого типа переводов", dto.getTypeId().toString(), "typeId");
 
         if (dto.getAmount() == null || dto.getAmount().compareTo(BigDecimal.ZERO) <= 0)
-            System.out.println("Не достаточно средств на счете");
+            throw new IncorrectParamException("Сумма не может быть меньше нуля/пустым", dto.getAmount().toPlainString(), "amount");
 
         if (dto.getNumberFrom() == null)
-            System.out.println("Не достаточно средств на счете");
+            throw new IncorrectParamException("Данное поле не может быть пустым", null, "numberFrom");
 
         if (dto.getNumberTo() == null)
-            System.out.println("Не достаточно средств на счете");
+            throw new IncorrectParamException("Данное поле не может быть пустым", null, "numberTo");
 
-        for (CurrencyType type : CurrencyType.values())
-            if (dto.getCurrencyId() == null || !dto.getCurrencyId().equals(type.getCurrencyTypeId()))
-                System.out.println("Не достаточно средств на счете");
+        if (dto.getCurrencyId() == null || !existsCurrencyType)
+            throw new IncorrectParamException("Данная валюта не поддерживается", dto.getCurrencyId().toString(), "currencyId");
 
-        if (dto.getNumberFrom() != null && accountService.getAccountId(dto.getNumberFrom()) == null)
-            System.out.println("Не достаточно средств на счете");
+        if (accountService.getAccountId(dto.getNumberFrom()) == null)
+            throw new IncorrectParamException("Номер счета с которого вы собираетесь перевести введен не верно", dto.getNumberFrom().toString(), "numberFrom");
 
         if (dto.getNumberTo() != null && accountService.getAccountId(dto.getNumberTo()) == null)
-            System.out.println("Не достаточно средств на счете");
+            throw new IncorrectParamException("Номер счета на который вы собираетесь перевести введен не верно", dto.getNumberTo().toString(), "numberTo");
 
-        if (dto.getTypeId().equals(TransactionType.DEPOSIT.getTransactionTypeId())){
+        if (!dto.getTypeId().equals(TransactionType.DEPOSIT.getTransactionTypeId())){
             if (dto.getAmount() != null && transactionRepository.balanceCheck(dto.getNumberFrom(), dto.getAmount()))
-                //TODO исключение
-                System.out.println("Не достаточно средств на счете");
+                throw new IncorrectParamException("Не достаточно средств на счете", dto.getNumberTo().toString(),
+                                                dto.getAmount().toString(), "numberTo", "amount");
         }
 
     }

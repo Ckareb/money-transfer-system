@@ -79,19 +79,19 @@ public class Account extends TableImpl<AccountRecord> {
     public final TableField<AccountRecord, String> ACCOUNT_NUMBER = createField(DSL.name("account_number"), SQLDataType.VARCHAR(20).nullable(false), this, "");
 
     /**
+     * The column <code>money_transfer.account.currency</code>.
+     */
+    public final TableField<AccountRecord, Long> CURRENCY = createField(DSL.name("currency"), SQLDataType.BIGINT.nullable(false), this, "");
+
+    /**
      * The column <code>money_transfer.account.balance</code>.
      */
-    public final TableField<AccountRecord, BigDecimal> BALANCE = createField(DSL.name("balance"), SQLDataType.NUMERIC(14, 2).nullable(false).defaultValue(DSL.field(DSL.raw("0"), SQLDataType.NUMERIC)), this, "");
+    public final TableField<AccountRecord, BigDecimal> BALANCE = createField(DSL.name("balance"), SQLDataType.NUMERIC.nullable(false).defaultValue(DSL.field(DSL.raw("0"), SQLDataType.NUMERIC)), this, "");
 
     /**
      * The column <code>money_transfer.account.created_at</code>.
      */
     public final TableField<AccountRecord, LocalDateTime> CREATED_AT = createField(DSL.name("created_at"), SQLDataType.LOCALDATETIME(6).defaultValue(DSL.field(DSL.raw("CURRENT_TIMESTAMP"), SQLDataType.LOCALDATETIME)), this, "");
-
-    /**
-     * The column <code>money_transfer.account.currency</code>.
-     */
-    public final TableField<AccountRecord, Long> CURRENCY = createField(DSL.name("currency"), SQLDataType.BIGINT.nullable(false), this, "");
 
     private Account(Name alias, Table<AccountRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);

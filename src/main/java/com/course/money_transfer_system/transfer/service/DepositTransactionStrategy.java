@@ -6,7 +6,6 @@ import com.course.money_transfer_system.transfer.ref.TransactionStatus;
 import com.course.money_transfer_system.transfer.ref.TransactionType;
 import com.course.money_transfer_system.transfer.repository.TransactionRepository;
 import com.course.money_transfer_system.transfer.strategy.TransactionStrategy;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -20,7 +19,6 @@ public class DepositTransactionStrategy implements TransactionStrategy {
     private final TransactionRepository transactionRepository;
     private final TransactionHistoryService transactionHistoryService;
 
-    @Autowired
     public DepositTransactionStrategy(TransactionRepository transactionRepository,
                                       TransactionHistoryService transactionHistoryService) {
         this.transactionRepository = transactionRepository;

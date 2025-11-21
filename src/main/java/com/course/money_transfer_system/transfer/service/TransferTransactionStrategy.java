@@ -6,7 +6,6 @@ import com.course.money_transfer_system.transfer.ref.TransactionStatus;
 import com.course.money_transfer_system.transfer.ref.TransactionType;
 import com.course.money_transfer_system.transfer.repository.TransactionRepository;
 import com.course.money_transfer_system.transfer.strategy.TransactionStrategy;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -20,7 +19,6 @@ public class TransferTransactionStrategy implements TransactionStrategy {
     private final TransactionRepository transactionRepository;
     private final TransactionHistoryService transactionHistoryService;
 
-    @Autowired
     public TransferTransactionStrategy(TransactionRepository transactionRepository,
                                       TransactionHistoryService transactionHistoryService) {
         this.transactionRepository = transactionRepository;
@@ -57,11 +55,4 @@ public class TransferTransactionStrategy implements TransactionStrategy {
                         TransactionStatus.SUCCESS.getDescription()
                 ), HttpStatus.OK);
     }
-
-//    private void checkBalance(String accountNumber, BigDecimal amount){
-//        if (!transactionRepository.balanceCheck(accountNumber, amount)){
-//            //TODO исключение
-//            System.out.println("Не достаточно средств на счете");
-//        }
-//    }
 }

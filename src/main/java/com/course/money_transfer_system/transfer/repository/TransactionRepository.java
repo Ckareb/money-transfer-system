@@ -48,9 +48,9 @@ public class TransactionRepository {
                 .where(ACCOUNT.ACCOUNT_NUMBER.eq(accountNumber.toUpperCase()))
                 .fetchOneInto(BigDecimal.class);
 
-        //TODO balance не может быть null в БД
+        //balance не может быть null в БД
         BigDecimal newBalance = balance.subtract(amount);
 
-        return newBalance.compareTo(BigDecimal.ZERO) >= 0;
+        return newBalance.compareTo(BigDecimal.ZERO) < 0;
     }
 }

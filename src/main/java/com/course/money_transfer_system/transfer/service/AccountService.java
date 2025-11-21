@@ -1,5 +1,7 @@
 package com.course.money_transfer_system.transfer.service;
 
+import com.course.money_transfer_system.exception.EntityNotFoundException;
+import com.course.money_transfer_system.exception.IncorrectParamException;
 import com.course.money_transfer_system.transfer.dto.AccountDto;
 import com.course.money_transfer_system.transfer.mapper.AccountMapper;
 import com.course.money_transfer_system.transfer.model.Account;
@@ -9,7 +11,6 @@ import com.course.money_transfer_system.transfer.ref.CurrencyType;
 import com.course.money_transfer_system.transfer.ref.TransactionStatus;
 import com.course.money_transfer_system.transfer.ref.TransactionType;
 import com.course.money_transfer_system.transfer.repository.AccountRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,6 @@ import java.util.List;
 public class AccountService {
     private final AccountRepository accountRepository;
 
-    @Autowired
     public AccountService(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
     }
@@ -37,8 +37,9 @@ public class AccountService {
     public List<AccountDto> getAccounts(Long id) {
         // TODO Проверка доступа
         if (!checkUserAccount(id)) {
-            System.out.println("Данного пользователя не существует");
+            throw new EntityNotFoundException("Данного пользователя не существует", id.toString());
         }
+
         return accountRepository.getAccounts(id);
     }
 
@@ -59,7 +60,7 @@ public class AccountService {
      */
     @Transactional
     public AccountDto createAccount(AccountDto dto) {
-        // TODO Проверка доступа и исключения
+        // TODO Проверка доступа
         checkDto(dto);
         Account account = AccountMapper.INSTANCE.toAccount(dto);
         //Заполняемые поля
@@ -76,14 +77,8 @@ public class AccountService {
      */
     @Transactional
     public AccountDto changeAccount(AccountDto dto) {
-        // TODO Проверка доступа и исключения
-        if (checkExistAccount(dto.getId())) {
-            System.out.println("Данного договора не существует");
-        }
-
-        if (!checkBalance(getAccount(dto.getId()).getBalance())) {
-            System.out.println("Балан перед изменением должен быть равен 0");
-        }
+        // TODO Проверка доступа
+        checkDtoBeforeChange(dto.getId());
 
         checkDto(dto);
         Account account = AccountMapper.INSTANCE.toAccount(dto);
@@ -98,14 +93,8 @@ public class AccountService {
      */
     @Transactional
     public ResponseEntity<ResponseInfo> deleteAccount(Long id) {
-        // TODO Проверка доступа и исключения
-        if (checkExistAccount(id)) {
-            System.out.println("Данного договора не существует");
-        }
-
-        if (!checkBalance(getAccount(id).getBalance())) {
-            System.out.println("Балан перед удаление должен быть равен 0");
-        }
+        // TODO Проверка доступа
+        checkDtoBeforeChange(id);
 
         int result = accountRepository.deleteAccount(id);
         if (result > 0) {
@@ -132,30 +121,10 @@ public class AccountService {
     }
 
     /**
-     * Проверяет наличие обязательных данных банковского счета
-     * @param dto банковской счет
-     */
-    private void checkDto(AccountDto dto) {
-        //TODO сделать классы исключений
-        if (dto.getAccountNumber() == null) {
-            System.out.println("Номер счета введен не верно");
-        }
-
-        if (accountRepository.existAccountNumber(dto.getAccountNumber())) {
-            System.out.println("Номер счета уже существует");
-        }
-
-        if (dto.getCurrency() == null) {
-            System.out.println("Валюта счета введена не верно");
-        }
-    }
-
-    /**
      * Получает типы транзакций
      * @return типы транзакций
      */
     public List<EnumDto> getTransactionType() {
-        // TODO Проверка доступа
         return Arrays.stream(TransactionType.values()).map(TransactionType::getEnumDto).toList();
     }
 
@@ -164,7 +133,6 @@ public class AccountService {
      * @return тип валюты
      */
     public List<EnumDto> getCurrencyType() {
-        // TODO Проверка доступа
         return Arrays.stream(CurrencyType.values()).map(CurrencyType::getEnumDto).toList();
     }
 
@@ -203,5 +171,42 @@ public class AccountService {
     protected Long getAccountId(String accountNumber){
         return accountRepository.getAccountId(accountNumber);
     }
+
+    /**
+     * Проверяет наличие обязательных данных банковского счета
+     * @param dto банковской счет
+     */
+    private void checkDto(AccountDto dto) {
+        boolean existsCurrencyType = false;
+
+        for (CurrencyType type : CurrencyType.values()) {
+            if (dto.getCurrency().equals(type.getCurrencyTypeId())) {
+                existsCurrencyType = true;
+                break;
+            }
+        }
+
+        if (dto.getAccountNumber() == null) {
+            throw new EntityNotFoundException("Номер счета введен не верно");
+        }
+
+        if (accountRepository.existAccountNumber(dto.getAccountNumber())) {
+            throw new IncorrectParamException("Номер счета уже существует", dto.getAccountNumber(), "accountNumber");
+        }
+
+        if (dto.getCurrency() == null || !existsCurrencyType)
+            throw new IncorrectParamException("Данная валюта не поддерживается", dto.getCurrency().toString(), "currency");
+    }
+
+    private void checkDtoBeforeChange(Long id) {
+        if (checkExistAccount(id)) {
+            throw new EntityNotFoundException("Данного счета не существует", id.toString());
+        }
+
+        if (!checkBalance(getAccount(id).getBalance())) {
+            throw new IncorrectParamException("Балан перед удалением/изменением должен быть равен 0");
+        }
+    }
+
 
 }

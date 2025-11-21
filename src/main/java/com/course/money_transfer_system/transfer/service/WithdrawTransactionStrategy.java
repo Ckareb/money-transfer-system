@@ -22,7 +22,6 @@ public class WithdrawTransactionStrategy implements TransactionStrategy {
     private final TransactionRepository transactionRepository;
     private final TransactionHistoryService transactionHistoryService;
 
-    @Autowired
     public WithdrawTransactionStrategy(TransactionRepository transactionRepository,
                                        TransactionHistoryService transactionHistoryService) {
         this.transactionRepository = transactionRepository;
@@ -56,12 +55,4 @@ public class WithdrawTransactionStrategy implements TransactionStrategy {
                         TransactionStatus.SUCCESS.getDescription()
                 ), HttpStatus.OK);
     }
-
-
-//    private void checkBalance(String accountNumber, BigDecimal amount){
-//        if (!transactionRepository.balanceCheck(accountNumber, amount)){
-//            //TODO исключение
-//            System.out.println("Не достаточно средств на счете");
-//        }
-//    }
 }

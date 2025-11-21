@@ -1,6 +1,7 @@
 package com.course.money_transfer_system.transfer.model;
 
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -13,10 +14,13 @@ public class ResponseInfo {
     private LocalDateTime data;
     private String description;
     private String status;
-    private String field;
-    private String date;
-    //private HttpStatus httpStatus;
-    //private HttpStatusCode httpStatusCode;
+    private String fieldOne;
+    private String dateOne;
+    private String fieldTwo;
+    private String dateTwo;
+    private int httpStatus;
+    private HttpStatusCode httpStatusCode;
+    private String path;
 
     public ResponseInfo(String message,
                         LocalDateTime data){
@@ -25,21 +29,29 @@ public class ResponseInfo {
     }
 
     public ResponseInfo(String message,
-                        String field,
-                        LocalDateTime data){
+                        String date){
         this.message = message;
-        this.data = data;
-        this.field = field;
+        this.dateOne = date;
     }
 
     public ResponseInfo(String message,
                         String date,
-                        String field,
-                        LocalDateTime data){
+                        String field){
         this.message = message;
-        this.date = date;
-        this.field = field;
-        this.data = data;
+        this.dateOne = date;
+        this.fieldTwo = field;
+    }
+
+    public ResponseInfo(String message,
+                        String dateOne,
+                        String dateTwo,
+                        String fieldOne,
+                        String fieldTwo){
+        this.message = message;
+        this.dateOne = dateOne;
+        this.fieldOne = fieldOne;
+        this.dateTwo = dateTwo;
+        this.fieldTwo = fieldTwo;
     }
 
     public ResponseInfo(String message,
@@ -60,5 +72,12 @@ public class ResponseInfo {
         this.data = data;
         this.description = description;
         this.status = status;
+    }
+
+    public void setPublicErrorInfo(HttpServletRequest request, HttpStatus status) {
+        this.data = LocalDateTime.now();
+        this.httpStatus = status.value();
+        this.httpStatusCode = HttpStatus.valueOf(status.value());
+        this.path = request.getRequestURI();
     }
 }
