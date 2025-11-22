@@ -3,11 +3,16 @@ package com.course.money_transfer_system.transfer.controller;
 import com.course.money_transfer_system.transfer.dto.AccountDto;
 import com.course.money_transfer_system.transfer.dto.TransactionDto;
 import com.course.money_transfer_system.transfer.dto.EnumDto;
+import com.course.money_transfer_system.transfer.dto.TransactionHistoryDto;
 import com.course.money_transfer_system.transfer.model.ResponseInfo;
 import com.course.money_transfer_system.transfer.service.AccountService;
+import com.course.money_transfer_system.transfer.service.TransactionHistoryService;
 import com.course.money_transfer_system.transfer.service.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,11 +25,14 @@ public class AccountController {
 
     private final AccountService accountService;
     private final TransactionService transactionService;
+    private final TransactionHistoryService transactionHistoryService;
 
     public AccountController(AccountService accountService,
-                             TransactionService transactionService) {
+                             TransactionService transactionService,
+                             TransactionHistoryService transactionHistoryService) {
         this.accountService = accountService;
         this.transactionService = transactionService;
+        this.transactionHistoryService = transactionHistoryService;
     }
 
     @Operation(summary = "Просмотр всех счетов аккаунта")
@@ -75,5 +83,9 @@ public class AccountController {
         return transactionService.transaction(dto);
     }
 
-    //TODO написать эндпоинт со списком всех историй счета
+    @Operation(summary = "Список истории транзакций")
+    @GetMapping("/{id}/history-transaction")
+    public Page<TransactionHistoryDto> getTransactionHistoryPages(@PathVariable Long id, @PageableDefault(size = 20) Pageable pageable) {
+        return transactionHistoryService.getTransactionHistoryPages(id, pageable);
+    }
 }

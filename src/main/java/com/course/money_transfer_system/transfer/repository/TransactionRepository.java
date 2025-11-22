@@ -1,15 +1,17 @@
 package com.course.money_transfer_system.transfer.repository;
 
 import com.course.money_transfer_system.transfer.dto.TransactionDto;
+import com.course.money_transfer_system.transfer.dto.TransactionHistoryDto;
 import com.course.money_transfer_system.transfer.model.TransactionHistory;
+import com.course.money_transfer_system.transfer.ref.TransactionStatus;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.util.List;
 
-import static jooq.money_transfer.Tables.ACCOUNT;
-import static jooq.money_transfer.Tables.TRANSACTION_HISTORY;
+import static jooq.money_transfer.Tables.*;
 
 @Repository
 public class TransactionRepository {
@@ -27,18 +29,6 @@ public class TransactionRepository {
         dsl.update(ACCOUNT)
                 .set(ACCOUNT.BALANCE, ACCOUNT.BALANCE.add(dto.getAmount()))
                 .where(ACCOUNT.ACCOUNT_NUMBER.eq(dto.getNumberTo().toUpperCase()))
-                .execute();
-    }
-
-    public void transactionHistoryInsert(TransactionHistory history){
-        dsl.insertInto(TRANSACTION_HISTORY)
-                .set(dsl.newRecord(TRANSACTION_HISTORY, history))
-                .execute();
-    }
-
-    public void transactionHistoryChangeStatus(Long statusId){
-        dsl.update(TRANSACTION_HISTORY)
-                .set(TRANSACTION_HISTORY.STATUS_ID, statusId)
                 .execute();
     }
 

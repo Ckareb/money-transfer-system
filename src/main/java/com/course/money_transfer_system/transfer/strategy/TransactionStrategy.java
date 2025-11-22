@@ -10,7 +10,4 @@ import java.math.BigDecimal;
 public interface TransactionStrategy {
     Long getTransactionTypeId();
     ResponseEntity<ResponseInfo> transaction(TransactionDto dto);
-    //void checkBalance(String accountNumber, BigDecimal amount);
-    //void transactionHistoryInsert(TransactionDto dto);
-    //void transactionHistoryChangeStatus(Long id);
 }
