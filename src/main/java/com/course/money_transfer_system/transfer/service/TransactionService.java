@@ -36,7 +36,7 @@ public class TransactionService {
     public ResponseEntity<ResponseInfo> transaction(TransactionDto dto) {
         checkDto(dto);
 
-        if (TransactionType.DEPOSIT.getTransactionTypeId().equals(dto.getTypeId()) && !canTransaction(dto))
+        if (!canTransaction(dto))
             throw new AccessDeniedException();
 
         TransactionStrategy strategy = strategies.get(dto.getTypeId());
@@ -95,6 +95,7 @@ public class TransactionService {
 
     private boolean canTransaction(TransactionDto dto) {
         if (TransactionType.DEPOSIT.getTransactionTypeId().equals(dto.getTypeId()))
+
             return true;
         else
             return accountService.canTransaction(dto.getNumberFrom());
