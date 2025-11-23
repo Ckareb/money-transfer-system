@@ -4,11 +4,12 @@ import com.course.money_transfer_system.transfer.model.ResponseInfo;
 
 
 public class EntityNotFoundException extends RuntimeException {
+    private static final String DEFAULT_MESSAGE = "Вы не можете выполнить это действие";
 
     private String date;
 
     public EntityNotFoundException() {
-        super("Значение не найдено");
+        super(DEFAULT_MESSAGE);
     }
 
 

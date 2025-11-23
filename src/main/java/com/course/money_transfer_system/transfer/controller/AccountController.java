@@ -1,9 +1,6 @@
 package com.course.money_transfer_system.transfer.controller;
 
-import com.course.money_transfer_system.transfer.dto.AccountDto;
-import com.course.money_transfer_system.transfer.dto.TransactionDto;
-import com.course.money_transfer_system.transfer.dto.EnumDto;
-import com.course.money_transfer_system.transfer.dto.TransactionHistoryDto;
+import com.course.money_transfer_system.transfer.dto.*;
 import com.course.money_transfer_system.transfer.model.ResponseInfo;
 import com.course.money_transfer_system.transfer.service.AccountService;
 import com.course.money_transfer_system.transfer.service.TransactionHistoryService;
@@ -44,7 +41,7 @@ public class AccountController {
     @Operation(summary = "Просмотр данных счета")
     @GetMapping(path = "/{id}")
     public AccountDto getAccount(@PathVariable Long id) {
-        return  accountService.getAccount(id);
+        return  accountService.getAccountDto(id);
     }
 
     @Operation(summary = "Создание счета")
@@ -74,7 +71,7 @@ public class AccountController {
     @Operation(summary = "Удаление счета")
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<ResponseInfo> deleteAccount(@PathVariable Long id) {
-        return  accountService.deleteAccount(id);
+        return accountService.deleteAccount(id);
     }
 
     @Operation(summary = "Изменение баланса счета")
@@ -87,5 +84,17 @@ public class AccountController {
     @GetMapping("/{id}/history-transaction")
     public Page<TransactionHistoryDto> getTransactionHistoryPages(@PathVariable Long id, @PageableDefault(size = 20) Pageable pageable) {
         return transactionHistoryService.getTransactionHistoryPages(id, pageable);
+    }
+
+    @Operation(summary = "Доступ к операциям над счетами")
+    @GetMapping(path = "/modify/access")
+    public AccountModifyAccessDto getModifyAccess() {
+        return accountService.getModifyAccess();
+    }
+
+    @Operation(summary = "Доступ к пользованию счетами")
+    @GetMapping(path = "/{id}/use/access")
+    public AccountUseAccessDto getUseAccess(@PathVariable Long id) {
+        return accountService.getUseAccess(id);
     }
 }

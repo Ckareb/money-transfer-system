@@ -59,7 +59,7 @@ public class AccountRepository {
                 .fetchInto(AccountDto.class);
     }
 
-    public AccountDto getAccount(Long id){
+    public AccountDto getAccountDto(Long id){
         return dsl.select(
                     ACCOUNT.ID,
                     ACCOUNT.USER_ACCOUNT_ID,
@@ -71,6 +71,20 @@ public class AccountRepository {
                 .from(ACCOUNT)
                 .where(ACCOUNT.ID.eq(id))
                 .fetchOneInto(AccountDto.class);
+    }
+
+    public Account getAccount(Long id){
+        return dsl.select(
+                        ACCOUNT.ID,
+                        ACCOUNT.USER_ACCOUNT_ID,
+                        ACCOUNT.ACCOUNT_NUMBER,
+                        ACCOUNT.CURRENCY,
+                        ACCOUNT.BALANCE,
+                        ACCOUNT.CREATED_AT
+                )
+                .from(ACCOUNT)
+                .where(ACCOUNT.ID.eq(id))
+                .fetchOneInto(Account.class);
     }
 
     public Account createAccount(Account account){

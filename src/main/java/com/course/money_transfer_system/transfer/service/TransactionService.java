@@ -1,5 +1,7 @@
 package com.course.money_transfer_system.transfer.service;
 
+import com.course.money_transfer_system.exception.AccessDeniedException;
+import com.course.money_transfer_system.exception.EntityNotFoundException;
 import com.course.money_transfer_system.exception.IncorrectParamException;
 import com.course.money_transfer_system.transfer.dto.TransactionDto;
 import com.course.money_transfer_system.transfer.model.ResponseInfo;
@@ -33,10 +35,13 @@ public class TransactionService {
 
     public ResponseEntity<ResponseInfo> transaction(TransactionDto dto) {
         checkDto(dto);
+
+        if (TransactionType.DEPOSIT.getTransactionTypeId().equals(dto.getTypeId()) && !canTransaction(dto))
+            throw new AccessDeniedException();
+
         TransactionStrategy strategy = strategies.get(dto.getTypeId());
         if (strategy == null) {
-            //TODO исключение
-            throw new RuntimeException("Стратегии с данным id " + dto.getTypeId() + " не существует");
+            throw new EntityNotFoundException("Стратегии с данным id не существует", dto.getTypeId().toString());
         }
         return strategy.transaction(dto);
     }
@@ -86,6 +91,12 @@ public class TransactionService {
                 throw new IncorrectParamException("Не достаточно средств на счете", dto.getNumberTo().toString(),
                                                 dto.getAmount().toString(), "numberTo", "amount");
         }
+    }
 
+    private boolean canTransaction(TransactionDto dto) {
+        if (TransactionType.DEPOSIT.getTransactionTypeId().equals(dto.getTypeId()))
+            return true;
+        else
+            return accountService.canTransaction(dto.getNumberFrom());
     }
 }

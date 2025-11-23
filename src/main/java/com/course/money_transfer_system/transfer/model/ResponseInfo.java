@@ -1,6 +1,7 @@
 package com.course.money_transfer_system.transfer.model;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatusCode;
 
 import java.time.LocalDateTime;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 public class ResponseInfo {
     private String message;
@@ -22,10 +24,8 @@ public class ResponseInfo {
     private HttpStatusCode httpStatusCode;
     private String path;
 
-    public ResponseInfo(String message,
-                        LocalDateTime data){
+    public ResponseInfo(String message){
         this.message = message;
-        this.data = data;
     }
 
     public ResponseInfo(String message,
@@ -39,13 +39,13 @@ public class ResponseInfo {
                         String field){
         this.message = message;
         this.dateOne = date;
-        this.fieldTwo = field;
+        this.fieldOne = field;
     }
 
     public ResponseInfo(String message,
                         String dateOne,
-                        String dateTwo,
                         String fieldOne,
+                        String dateTwo,
                         String fieldTwo){
         this.message = message;
         this.dateOne = dateOne;

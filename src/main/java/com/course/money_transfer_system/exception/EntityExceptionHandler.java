@@ -24,4 +24,11 @@ public class EntityExceptionHandler {
         info.setPublicErrorInfo(request, HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(info, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    ResponseEntity<ResponseInfo> handlerIncorrectParamException(AccessDeniedException ex, HttpServletRequest request) {
+        ResponseInfo info = ex.getResponseInfo();
+        info.setPublicErrorInfo(request, HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(info, HttpStatus.FORBIDDEN);
+    }
 }
