@@ -66,10 +66,10 @@ public class TransactionService {
         }
 
         if (dto.getTypeId() == null || !existsTransType)
-            throw new IncorrectParamException("Не существует такого типа переводов", dto.getTypeId().toString(), "typeId");
+            throw new IncorrectParamException("Не существует такого типа переводов", dto.getTypeId() != null ? dto.getTypeId().toString() : null, "typeId");
 
         if (dto.getAmount() == null || dto.getAmount().compareTo(BigDecimal.ZERO) <= 0)
-            throw new IncorrectParamException("Сумма не может быть меньше нуля/пустым", dto.getAmount().toPlainString(), "amount");
+            throw new IncorrectParamException("Сумма не может быть меньше нуля/пустым", dto.getAmount() != null ? dto.getAmount().toString() : null, "amount");
 
         if (dto.getNumberFrom() == null)
             throw new IncorrectParamException("Данное поле не может быть пустым", null, "numberFrom");
@@ -78,17 +78,17 @@ public class TransactionService {
             throw new IncorrectParamException("Данное поле не может быть пустым", null, "numberTo");
 
         if (dto.getCurrencyId() == null || !existsCurrencyType)
-            throw new IncorrectParamException("Данная валюта не поддерживается", dto.getCurrencyId().toString(), "currencyId");
+            throw new IncorrectParamException("Данная валюта не поддерживается", dto.getCurrencyId() != null ? dto.getCurrencyId().toString() : null, "currencyId");
 
         if (accountService.getAccountId(dto.getNumberFrom()) == null)
-            throw new IncorrectParamException("Номер счета с которого вы собираетесь перевести введен не верно", dto.getNumberFrom().toString(), "numberFrom");
+            throw new IncorrectParamException("Номер счета с которого вы собираетесь перевести введен не верно", dto.getNumberFrom(), "numberFrom");
 
         if (dto.getNumberTo() != null && accountService.getAccountId(dto.getNumberTo()) == null)
-            throw new IncorrectParamException("Номер счета на который вы собираетесь перевести введен не верно", dto.getNumberTo().toString(), "numberTo");
+            throw new IncorrectParamException("Номер счета на который вы собираетесь перевести введен не верно", dto.getNumberTo(), "numberTo");
 
         if (!dto.getTypeId().equals(TransactionType.DEPOSIT.getTransactionTypeId())){
             if (dto.getAmount() != null && transactionRepository.balanceCheck(dto.getNumberFrom(), dto.getAmount()))
-                throw new IncorrectParamException("Не достаточно средств на счете", dto.getNumberTo().toString(),
+                throw new IncorrectParamException("Не достаточно средств на счете", dto.getNumberTo(),
                                                 dto.getAmount().toString(), "numberTo", "amount");
         }
     }

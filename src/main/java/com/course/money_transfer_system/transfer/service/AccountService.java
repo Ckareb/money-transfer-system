@@ -211,7 +211,7 @@ public class AccountService {
         }
 
         if (dto.getCurrency() == null || !existsCurrencyType)
-            throw new IncorrectParamException("Данная валюта не поддерживается", dto.getCurrency().toString(), "currency");
+            throw new IncorrectParamException("Данная валюта не поддерживается", dto.getCurrency() != null ? dto.getCurrency().toString() : null, "currency");
     }
 
     private void checkDtoBeforeChange(Long id) {
