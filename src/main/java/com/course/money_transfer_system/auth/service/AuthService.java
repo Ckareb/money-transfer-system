@@ -2,11 +2,10 @@ package com.course.money_transfer_system.auth.service;
 
 import com.course.money_transfer_system.auth.config.JwtUtil;
 import com.course.money_transfer_system.auth.model.UserAccount;
-import com.course.money_transfer_system.auth.repository.UserAccountRepository;
-import com.course.money_transfer_system.exception.EntityNotFoundException;
 import com.course.money_transfer_system.exception.IncorrectParamException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -57,8 +56,6 @@ public class AuthService {
             throw new IncorrectParamException("Пустой логин или пароль");
         }
 
-
-
         UserAccount user = userAccountService.findByUsername(username);
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
@@ -71,12 +68,18 @@ public class AuthService {
 
     public static String getUsername() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return auth == null ? null : auth.getName();
+        return auth.getName();
     }
 
-    public static boolean authorityRole(String authorityUserRole) {
-        String role = SecurityContextHolder.getContext().getAuthentication().getCredentials().toString();
-        return role.equalsIgnoreCase(authorityUserRole);
+    private static boolean authorityRole(String authorityUserRole) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        for (GrantedAuthority authority : auth.getAuthorities()) {
+            if (authority.getAuthority().equalsIgnoreCase(authorityUserRole)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 

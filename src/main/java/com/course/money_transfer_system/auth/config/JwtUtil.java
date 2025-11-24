@@ -11,6 +11,7 @@ import java.util.Date;
 
 @Component
 public class JwtUtil {
+    //В реальном проекте хранится в конфиге для защиты и чтобы не сбрасывалась валидность токенов при каждом перезапуске
     private static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     private static final long EXPIRATION_TIME = 1000 * 60 * 60; // 1 час
 

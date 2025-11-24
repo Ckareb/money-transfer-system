@@ -34,6 +34,7 @@ public class TransactionService {
     }
 
     public ResponseEntity<ResponseInfo> transaction(TransactionDto dto) {
+
         checkDto(dto);
 
         if (!canTransaction(dto))

@@ -1,20 +1,22 @@
 package com.course.money_transfer_system.auth.config;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
+import com.course.money_transfer_system.exception.IncorrectParamException;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.security.Key;
 import java.util.Collections;
+import java.util.List;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
@@ -37,15 +39,32 @@ public class JwtFilter extends OncePerRequestFilter {
             String token = authHeader.substring(7);
             try {
                 String username = jwtUtil.extractUsername(token);
+                String password = null;
                 String role = jwtUtil.extractRole(token);
+                if (username == null) {
+                    throw new IncorrectParamException("Передан пустой токен");
+                }
+
+                List<GrantedAuthority> authorities = role == null
+                        ? Collections.emptyList()
+                        : Collections.singletonList(new SimpleGrantedAuthority(role));
 
                 UsernamePasswordAuthenticationToken auth =
-                        new UsernamePasswordAuthenticationToken(username, role, Collections.emptyList());
+                        new UsernamePasswordAuthenticationToken(username, password, authorities);
 
                 SecurityContextHolder.getContext().setAuthentication(auth);
 
-            } catch (Exception e) {
+            } catch (ExpiredJwtException ex) {
+                SecurityContextHolder.clearContext();
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token expired");
+                return;
+            } catch (JwtException | IllegalArgumentException ex) {
+                SecurityContextHolder.clearContext();
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token");
+                return;
+            } catch (Exception ex) {
+                SecurityContextHolder.clearContext();
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authentication error");
                 return;
             }
         }
