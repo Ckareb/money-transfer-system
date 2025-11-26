@@ -35,6 +35,12 @@ public class ResponseInfo {
     }
 
     public ResponseInfo(String message,
+                        LocalDateTime data){
+        this.message = message;
+        this.data = data;
+    }
+
+    public ResponseInfo(String message,
                         String date,
                         String field){
         this.message = message;

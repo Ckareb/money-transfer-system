@@ -11,7 +11,6 @@ import java.util.List;
 import jooq.money_transfer.Keys;
 import jooq.money_transfer.MoneyTransfer;
 import jooq.money_transfer.tables.Account.AccountPath;
-import jooq.money_transfer.tables.TransactionHistory.TransactionHistoryPath;
 import jooq.money_transfer.tables.records.CurrencyTypeRecord;
 
 import org.jooq.Condition;
@@ -173,19 +172,6 @@ public class CurrencyType extends TableImpl<CurrencyTypeRecord> {
             _account = new AccountPath(this, null, Keys.ACCOUNT__CURRENCY_TYPE_FK.getInverseKey());
 
         return _account;
-    }
-
-    private transient TransactionHistoryPath _transactionHistory;
-
-    /**
-     * Get the implicit to-many join path to the
-     * <code>money_transfer.transaction_history</code> table
-     */
-    public TransactionHistoryPath transactionHistory() {
-        if (_transactionHistory == null)
-            _transactionHistory = new TransactionHistoryPath(this, null, Keys.TRANSACTION_HISTORY__CURRENCY_TYPE_FK.getInverseKey());
-
-        return _transactionHistory;
     }
 
     @Override

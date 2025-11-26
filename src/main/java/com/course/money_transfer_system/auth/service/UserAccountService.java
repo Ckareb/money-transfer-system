@@ -26,9 +26,9 @@ public class UserAccountService {
     }
 
     private void checkUser(UserAccount user) {
-        if (user == null || user.getUsername() == null || user.getPassword() == null) {
+
+        if (user == null || user.getUsername() == null || user.getPassword() == null)
             throw new EntityNotFoundException("Пользователь с данным логином не найден");
-        }
 
         if (!user.isEnabled())
             throw new IncorrectParamException("Пользователь с данным логином заблокирован");

@@ -5,6 +5,8 @@ package jooq.money_transfer;
 
 
 import jooq.money_transfer.tables.Account;
+import jooq.money_transfer.tables.AccountStatus;
+import jooq.money_transfer.tables.AccountType;
 import jooq.money_transfer.tables.CurrencyType;
 import jooq.money_transfer.tables.TransactionHistory;
 import jooq.money_transfer.tables.TransactionStatus;
@@ -21,6 +23,16 @@ public class Tables {
      * The table <code>money_transfer.account</code>.
      */
     public static final Account ACCOUNT = Account.ACCOUNT;
+
+    /**
+     * The table <code>money_transfer.account_status</code>.
+     */
+    public static final AccountStatus ACCOUNT_STATUS = AccountStatus.ACCOUNT_STATUS;
+
+    /**
+     * The table <code>money_transfer.account_type</code>.
+     */
+    public static final AccountType ACCOUNT_TYPE = AccountType.ACCOUNT_TYPE;
 
     /**
      * The table <code>money_transfer.currency_type</code>.

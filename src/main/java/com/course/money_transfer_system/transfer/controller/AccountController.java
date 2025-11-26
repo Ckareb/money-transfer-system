@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "Операции со счетом")
+@Tag(name = "Операции со счетами")
 @RestController
 @RequestMapping("/account")
 public class AccountController {
@@ -33,9 +33,9 @@ public class AccountController {
     }
 
     @Operation(summary = "Просмотр всех счетов аккаунта")
-    @GetMapping(path = "/userId/{id}")
-    public List<AccountDto> getAccounts(@PathVariable Long id) {
-        return  accountService.getAccounts(id);
+    @GetMapping(path = "/userId/{userId}")
+    public List<AccountDto> getAccounts(@PathVariable Long userId) {
+        return  accountService.getAccounts(userId);
     }
 
     @Operation(summary = "Просмотр данных счета")
@@ -47,13 +47,13 @@ public class AccountController {
     @Operation(summary = "Создание счета")
     @PostMapping(path = "/create")
     public AccountDto createAccount(@RequestBody AccountDto dto) {
-        return  accountService.createAccount(dto);
+        return accountService.createAccount(dto);
     }
 
     @Operation(summary = "Изменение данных счета")
     @PutMapping(path = "/change")
     public AccountDto changeAccount(@RequestBody AccountDto dto) {
-        return  accountService.changeAccount(dto);
+        return accountService.changeAccount(dto);
     }
 
     @Operation(summary = "Просмотр доступных типов операции")
@@ -68,10 +68,16 @@ public class AccountController {
         return  accountService.getCurrencyType();
     }
 
-    @Operation(summary = "Удаление счета")
-    @DeleteMapping(path = "/{id}")
-    public ResponseEntity<ResponseInfo> deleteAccount(@PathVariable Long id) {
-        return accountService.deleteAccount(id);
+    @Operation(summary = "Просмотр доступных типов счетов")
+    @GetMapping(path = "/account-type")
+    public List<EnumDto> getAccountType() {
+        return  accountService.getAccountType();
+    }
+
+    @Operation(summary = "Закрытие счета")
+    @PutMapping(path = "/close/{id}")
+    public ResponseEntity<ResponseInfo> closeAccount(@PathVariable Long id) {
+        return accountService.closeAccount(id);
     }
 
     @Operation(summary = "Изменение баланса счета")
@@ -86,15 +92,15 @@ public class AccountController {
         return transactionHistoryService.getTransactionHistoryPages(id, pageable);
     }
 
-    @Operation(summary = "Доступ к операциям над счетами")
-    @GetMapping(path = "/modify/access")
-    public AccountModifyAccessDto getModifyAccess() {
-        return accountService.getModifyAccess();
+    @Operation(summary = "Доступ к операциям без id")
+    @GetMapping(path = "/access")
+    public AccountAccessDto getModifyAccess() {
+        return accountService.getAccess();
     }
 
-    @Operation(summary = "Доступ к пользованию счетами")
-    @GetMapping(path = "/{id}/use/access")
-    public AccountUseAccessDto getUseAccess(@PathVariable Long id) {
-        return accountService.getUseAccess(id);
+    @Operation(summary = "Доступ к операциям с id")
+    @GetMapping(path = "/{id}/access")
+    public AccountAccessWithIdDto getUseAccess(@PathVariable Long id) {
+        return accountService.getAccessWithId(id);
     }
 }

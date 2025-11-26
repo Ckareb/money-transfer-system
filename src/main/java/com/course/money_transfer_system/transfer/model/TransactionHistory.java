@@ -35,8 +35,18 @@ public class TransactionHistory {
     @Schema(description = "Описание")
     private String description;
 
-    @Schema(description = "Код терминала используемого при транзакции")
-    private String terminalCode;
+    @Schema(description = "Куда отправляются деньги вне системы")
+    private String outgoingCode;
+
+    @Schema(description = "Наименование статуса транзакции")
+    private String statusName;
+
+    @Schema(description = "Наименование валюты транзакции")
+    private String currencyName;
+
+    @Schema(description = "Наименование типа транзакции")
+    private String typeName;
+
 
     public TransactionHistory(Long id,
                               Long fromAccountId,
@@ -47,7 +57,10 @@ public class TransactionHistory {
                               Long statusId,
                               LocalDateTime createdAt,
                               String description,
-                              String terminalCode) {
+                              String outgoingCode,
+                              String statusName,
+                              String currencyName,
+                              String typeName) {
         this.id = id;
         this.fromAccountId = fromAccountId;
         this.toAccountId = toAccountId;
@@ -57,6 +70,9 @@ public class TransactionHistory {
         this.statusId = statusId;
         this.createdAt = createdAt;
         this.description = description;
-        this.terminalCode = terminalCode;
+        this.outgoingCode = outgoingCode;
+        this.statusName = statusName;
+        this.currencyName = currencyName;
+        this.typeName = typeName;
     }
 }

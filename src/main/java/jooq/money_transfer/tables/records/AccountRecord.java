@@ -111,6 +111,51 @@ public class AccountRecord extends UpdatableRecordImpl<AccountRecord> {
         return (LocalDateTime) get(5);
     }
 
+    /**
+     * Setter for <code>money_transfer.account.type_id</code>.
+     */
+    public AccountRecord setTypeId(Long value) {
+        set(6, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>money_transfer.account.type_id</code>.
+     */
+    public Long getTypeId() {
+        return (Long) get(6);
+    }
+
+    /**
+     * Setter for <code>money_transfer.account.status_id</code>.
+     */
+    public AccountRecord setStatusId(Long value) {
+        set(7, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>money_transfer.account.status_id</code>.
+     */
+    public Long getStatusId() {
+        return (Long) get(7);
+    }
+
+    /**
+     * Setter for <code>money_transfer.account.closed_at</code>.
+     */
+    public AccountRecord setClosedAt(LocalDateTime value) {
+        set(8, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>money_transfer.account.closed_at</code>.
+     */
+    public LocalDateTime getClosedAt() {
+        return (LocalDateTime) get(8);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -134,7 +179,7 @@ public class AccountRecord extends UpdatableRecordImpl<AccountRecord> {
     /**
      * Create a detached, initialised AccountRecord
      */
-    public AccountRecord(Long id, Long userAccountId, String accountNumber, Long currency, BigDecimal balance, LocalDateTime createdAt) {
+    public AccountRecord(Long id, Long userAccountId, String accountNumber, Long currency, BigDecimal balance, LocalDateTime createdAt, Long typeId, Long statusId, LocalDateTime closedAt) {
         super(Account.ACCOUNT);
 
         setId(id);
@@ -143,6 +188,9 @@ public class AccountRecord extends UpdatableRecordImpl<AccountRecord> {
         setCurrency(currency);
         setBalance(balance);
         setCreatedAt(createdAt);
+        setTypeId(typeId);
+        setStatusId(statusId);
+        setClosedAt(closedAt);
         resetTouchedOnNotNull();
     }
 
@@ -159,6 +207,9 @@ public class AccountRecord extends UpdatableRecordImpl<AccountRecord> {
             setCurrency(value.getCurrency());
             setBalance(value.getBalance());
             setCreatedAt(value.getCreatedAt());
+            setTypeId(value.getTypeId());
+            setStatusId(value.getStatusId());
+            setClosedAt(value.getClosedAt());
             resetTouchedOnNotNull();
         }
     }

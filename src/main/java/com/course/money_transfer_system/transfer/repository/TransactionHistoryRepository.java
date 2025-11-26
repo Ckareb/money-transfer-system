@@ -41,7 +41,7 @@ public class TransactionHistoryRepository {
                     TRANSACTION_HISTORY.STATUS_ID,
                     TRANSACTION_HISTORY.CREATED_AT,
                     TRANSACTION_HISTORY.DESCRIPTION,
-                    TRANSACTION_HISTORY.TERMINAL_CODE
+                    TRANSACTION_HISTORY.OUTGOING_CODE
                 )
                 .from(TRANSACTION_HISTORY)
                 .join(ACCOUNT.as("fromAccount")).on(TRANSACTION_HISTORY.FROM_ACCOUNT_ID.eq(ACCOUNT.as("fromAccount").ID))
@@ -62,9 +62,10 @@ public class TransactionHistoryRepository {
                 .execute();
     }
 
-    public void transactionHistoryChangeStatus(Long statusId){
+    public void transactionHistoryChangeStatus(Long statusId, String statusName){
         dsl.update(TRANSACTION_HISTORY)
                 .set(TRANSACTION_HISTORY.STATUS_ID, statusId)
+                .set(TRANSACTION_HISTORY.STATUS_NAME, statusName)
                 .execute();
     }
 }

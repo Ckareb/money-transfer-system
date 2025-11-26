@@ -13,6 +13,8 @@ import java.util.List;
 import jooq.auth.tables.UserAccount.UserAccountPath;
 import jooq.money_transfer.Keys;
 import jooq.money_transfer.MoneyTransfer;
+import jooq.money_transfer.tables.AccountStatus.AccountStatusPath;
+import jooq.money_transfer.tables.AccountType.AccountTypePath;
 import jooq.money_transfer.tables.CurrencyType.CurrencyTypePath;
 import jooq.money_transfer.tables.TransactionHistory.TransactionHistoryPath;
 import jooq.money_transfer.tables.records.AccountRecord;
@@ -92,6 +94,21 @@ public class Account extends TableImpl<AccountRecord> {
      * The column <code>money_transfer.account.created_at</code>.
      */
     public final TableField<AccountRecord, LocalDateTime> CREATED_AT = createField(DSL.name("created_at"), SQLDataType.LOCALDATETIME(6).defaultValue(DSL.field(DSL.raw("CURRENT_TIMESTAMP"), SQLDataType.LOCALDATETIME)), this, "");
+
+    /**
+     * The column <code>money_transfer.account.type_id</code>.
+     */
+    public final TableField<AccountRecord, Long> TYPE_ID = createField(DSL.name("type_id"), SQLDataType.BIGINT.nullable(false), this, "");
+
+    /**
+     * The column <code>money_transfer.account.status_id</code>.
+     */
+    public final TableField<AccountRecord, Long> STATUS_ID = createField(DSL.name("status_id"), SQLDataType.BIGINT.nullable(false), this, "");
+
+    /**
+     * The column <code>money_transfer.account.closed_at</code>.
+     */
+    public final TableField<AccountRecord, LocalDateTime> CLOSED_AT = createField(DSL.name("closed_at"), SQLDataType.LOCALDATETIME(6), this, "");
 
     private Account(Name alias, Table<AccountRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
@@ -177,7 +194,33 @@ public class Account extends TableImpl<AccountRecord> {
 
     @Override
     public List<ForeignKey<AccountRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.ACCOUNT__CURRENCY_TYPE_FK, Keys.ACCOUNT__USER_ACCOUNT_FK1);
+        return Arrays.asList(Keys.ACCOUNT__ACCOUNT_STATUS_FK, Keys.ACCOUNT__ACCOUNT_TYPE_FK, Keys.ACCOUNT__CURRENCY_TYPE_FK, Keys.ACCOUNT__USER_ACCOUNT_FK1);
+    }
+
+    private transient AccountStatusPath _accountStatus;
+
+    /**
+     * Get the implicit join path to the
+     * <code>money_transfer.account_status</code> table.
+     */
+    public AccountStatusPath accountStatus() {
+        if (_accountStatus == null)
+            _accountStatus = new AccountStatusPath(this, Keys.ACCOUNT__ACCOUNT_STATUS_FK, null);
+
+        return _accountStatus;
+    }
+
+    private transient AccountTypePath _accountType;
+
+    /**
+     * Get the implicit join path to the
+     * <code>money_transfer.account_type</code> table.
+     */
+    public AccountTypePath accountType() {
+        if (_accountType == null)
+            _accountType = new AccountTypePath(this, Keys.ACCOUNT__ACCOUNT_TYPE_FK, null);
+
+        return _accountType;
     }
 
     private transient CurrencyTypePath _currencyType;

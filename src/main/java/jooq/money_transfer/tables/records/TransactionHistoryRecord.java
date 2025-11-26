@@ -159,18 +159,63 @@ public class TransactionHistoryRecord extends UpdatableRecordImpl<TransactionHis
     }
 
     /**
-     * Setter for <code>money_transfer.transaction_history.terminal_code</code>.
+     * Setter for <code>money_transfer.transaction_history.outgoing_code</code>.
      */
-    public TransactionHistoryRecord setTerminalCode(String value) {
+    public TransactionHistoryRecord setOutgoingCode(String value) {
         set(9, value);
         return this;
     }
 
     /**
-     * Getter for <code>money_transfer.transaction_history.terminal_code</code>.
+     * Getter for <code>money_transfer.transaction_history.outgoing_code</code>.
      */
-    public String getTerminalCode() {
+    public String getOutgoingCode() {
         return (String) get(9);
+    }
+
+    /**
+     * Setter for <code>money_transfer.transaction_history.status_name</code>.
+     */
+    public TransactionHistoryRecord setStatusName(String value) {
+        set(10, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>money_transfer.transaction_history.status_name</code>.
+     */
+    public String getStatusName() {
+        return (String) get(10);
+    }
+
+    /**
+     * Setter for <code>money_transfer.transaction_history.currency_name</code>.
+     */
+    public TransactionHistoryRecord setCurrencyName(String value) {
+        set(11, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>money_transfer.transaction_history.currency_name</code>.
+     */
+    public String getCurrencyName() {
+        return (String) get(11);
+    }
+
+    /**
+     * Setter for <code>money_transfer.transaction_history.type_name</code>.
+     */
+    public TransactionHistoryRecord setTypeName(String value) {
+        set(12, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>money_transfer.transaction_history.type_name</code>.
+     */
+    public String getTypeName() {
+        return (String) get(12);
     }
 
     // -------------------------------------------------------------------------
@@ -196,7 +241,7 @@ public class TransactionHistoryRecord extends UpdatableRecordImpl<TransactionHis
     /**
      * Create a detached, initialised TransactionHistoryRecord
      */
-    public TransactionHistoryRecord(Long id, Long fromAccountId, Long toAccountId, BigDecimal amount, Long currency, Long typeId, Long statusId, LocalDateTime createdAt, String description, String terminalCode) {
+    public TransactionHistoryRecord(Long id, Long fromAccountId, Long toAccountId, BigDecimal amount, Long currency, Long typeId, Long statusId, LocalDateTime createdAt, String description, String outgoingCode, String statusName, String currencyName, String typeName) {
         super(TransactionHistory.TRANSACTION_HISTORY);
 
         setId(id);
@@ -208,7 +253,10 @@ public class TransactionHistoryRecord extends UpdatableRecordImpl<TransactionHis
         setStatusId(statusId);
         setCreatedAt(createdAt);
         setDescription(description);
-        setTerminalCode(terminalCode);
+        setOutgoingCode(outgoingCode);
+        setStatusName(statusName);
+        setCurrencyName(currencyName);
+        setTypeName(typeName);
         resetTouchedOnNotNull();
     }
 
@@ -228,7 +276,10 @@ public class TransactionHistoryRecord extends UpdatableRecordImpl<TransactionHis
             setStatusId(value.getStatusId());
             setCreatedAt(value.getCreatedAt());
             setDescription(value.getDescription());
-            setTerminalCode(value.getTerminalCode());
+            setOutgoingCode(value.getOutgoingCode());
+            setStatusName(value.getStatusName());
+            setCurrencyName(value.getCurrencyName());
+            setTypeName(value.getTypeName());
             resetTouchedOnNotNull();
         }
     }

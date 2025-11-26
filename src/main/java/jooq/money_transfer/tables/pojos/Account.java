@@ -23,6 +23,9 @@ public class Account implements Serializable {
     private Long currency;
     private BigDecimal balance;
     private LocalDateTime createdAt;
+    private Long typeId;
+    private Long statusId;
+    private LocalDateTime closedAt;
 
     public Account() {}
 
@@ -33,6 +36,9 @@ public class Account implements Serializable {
         this.currency = value.currency;
         this.balance = value.balance;
         this.createdAt = value.createdAt;
+        this.typeId = value.typeId;
+        this.statusId = value.statusId;
+        this.closedAt = value.closedAt;
     }
 
     public Account(
@@ -41,7 +47,10 @@ public class Account implements Serializable {
         String accountNumber,
         Long currency,
         BigDecimal balance,
-        LocalDateTime createdAt
+        LocalDateTime createdAt,
+        Long typeId,
+        Long statusId,
+        LocalDateTime closedAt
     ) {
         this.id = id;
         this.userAccountId = userAccountId;
@@ -49,6 +58,9 @@ public class Account implements Serializable {
         this.currency = currency;
         this.balance = balance;
         this.createdAt = createdAt;
+        this.typeId = typeId;
+        this.statusId = statusId;
+        this.closedAt = closedAt;
     }
 
     /**
@@ -141,6 +153,51 @@ public class Account implements Serializable {
         return this;
     }
 
+    /**
+     * Getter for <code>money_transfer.account.type_id</code>.
+     */
+    public Long getTypeId() {
+        return this.typeId;
+    }
+
+    /**
+     * Setter for <code>money_transfer.account.type_id</code>.
+     */
+    public Account setTypeId(Long typeId) {
+        this.typeId = typeId;
+        return this;
+    }
+
+    /**
+     * Getter for <code>money_transfer.account.status_id</code>.
+     */
+    public Long getStatusId() {
+        return this.statusId;
+    }
+
+    /**
+     * Setter for <code>money_transfer.account.status_id</code>.
+     */
+    public Account setStatusId(Long statusId) {
+        this.statusId = statusId;
+        return this;
+    }
+
+    /**
+     * Getter for <code>money_transfer.account.closed_at</code>.
+     */
+    public LocalDateTime getClosedAt() {
+        return this.closedAt;
+    }
+
+    /**
+     * Setter for <code>money_transfer.account.closed_at</code>.
+     */
+    public Account setClosedAt(LocalDateTime closedAt) {
+        this.closedAt = closedAt;
+        return this;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -177,6 +234,9 @@ public class Account implements Serializable {
         sb.append(", ").append(currency);
         sb.append(", ").append(balance);
         sb.append(", ").append(createdAt);
+        sb.append(", ").append(typeId);
+        sb.append(", ").append(statusId);
+        sb.append(", ").append(closedAt);
 
         sb.append(")");
         return sb.toString();

@@ -17,10 +17,8 @@ public class UserAccount implements Serializable {
 
     private Long id;
     private String username;
-    private String fullName;
     private Boolean enabled;
     private String password;
-    private String numberPhone;
     private Long roleId;
 
     public UserAccount() {}
@@ -28,28 +26,22 @@ public class UserAccount implements Serializable {
     public UserAccount(UserAccount value) {
         this.id = value.id;
         this.username = value.username;
-        this.fullName = value.fullName;
         this.enabled = value.enabled;
         this.password = value.password;
-        this.numberPhone = value.numberPhone;
         this.roleId = value.roleId;
     }
 
     public UserAccount(
         Long id,
         String username,
-        String fullName,
         Boolean enabled,
         String password,
-        String numberPhone,
         Long roleId
     ) {
         this.id = id;
         this.username = username;
-        this.fullName = fullName;
         this.enabled = enabled;
         this.password = password;
-        this.numberPhone = numberPhone;
         this.roleId = roleId;
     }
 
@@ -84,21 +76,6 @@ public class UserAccount implements Serializable {
     }
 
     /**
-     * Getter for <code>auth.user_account.full_name</code>.
-     */
-    public String getFullName() {
-        return this.fullName;
-    }
-
-    /**
-     * Setter for <code>auth.user_account.full_name</code>.
-     */
-    public UserAccount setFullName(String fullName) {
-        this.fullName = fullName;
-        return this;
-    }
-
-    /**
      * Getter for <code>auth.user_account.enabled</code>.
      */
     public Boolean getEnabled() {
@@ -125,21 +102,6 @@ public class UserAccount implements Serializable {
      */
     public UserAccount setPassword(String password) {
         this.password = password;
-        return this;
-    }
-
-    /**
-     * Getter for <code>auth.user_account.number_phone</code>.
-     */
-    public String getNumberPhone() {
-        return this.numberPhone;
-    }
-
-    /**
-     * Setter for <code>auth.user_account.number_phone</code>.
-     */
-    public UserAccount setNumberPhone(String numberPhone) {
-        this.numberPhone = numberPhone;
         return this;
     }
 
@@ -190,10 +152,8 @@ public class UserAccount implements Serializable {
 
         sb.append(id);
         sb.append(", ").append(username);
-        sb.append(", ").append(fullName);
         sb.append(", ").append(enabled);
         sb.append(", ").append(password);
-        sb.append(", ").append(numberPhone);
         sb.append(", ").append(roleId);
 
         sb.append(")");

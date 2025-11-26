@@ -26,7 +26,10 @@ public class TransactionHistory implements Serializable {
     private Long statusId;
     private LocalDateTime createdAt;
     private String description;
-    private String terminalCode;
+    private String outgoingCode;
+    private String statusName;
+    private String currencyName;
+    private String typeName;
 
     public TransactionHistory() {}
 
@@ -40,7 +43,10 @@ public class TransactionHistory implements Serializable {
         this.statusId = value.statusId;
         this.createdAt = value.createdAt;
         this.description = value.description;
-        this.terminalCode = value.terminalCode;
+        this.outgoingCode = value.outgoingCode;
+        this.statusName = value.statusName;
+        this.currencyName = value.currencyName;
+        this.typeName = value.typeName;
     }
 
     public TransactionHistory(
@@ -53,7 +59,10 @@ public class TransactionHistory implements Serializable {
         Long statusId,
         LocalDateTime createdAt,
         String description,
-        String terminalCode
+        String outgoingCode,
+        String statusName,
+        String currencyName,
+        String typeName
     ) {
         this.id = id;
         this.fromAccountId = fromAccountId;
@@ -64,7 +73,10 @@ public class TransactionHistory implements Serializable {
         this.statusId = statusId;
         this.createdAt = createdAt;
         this.description = description;
-        this.terminalCode = terminalCode;
+        this.outgoingCode = outgoingCode;
+        this.statusName = statusName;
+        this.currencyName = currencyName;
+        this.typeName = typeName;
     }
 
     /**
@@ -205,17 +217,62 @@ public class TransactionHistory implements Serializable {
     }
 
     /**
-     * Getter for <code>money_transfer.transaction_history.terminal_code</code>.
+     * Getter for <code>money_transfer.transaction_history.outgoing_code</code>.
      */
-    public String getTerminalCode() {
-        return this.terminalCode;
+    public String getOutgoingCode() {
+        return this.outgoingCode;
     }
 
     /**
-     * Setter for <code>money_transfer.transaction_history.terminal_code</code>.
+     * Setter for <code>money_transfer.transaction_history.outgoing_code</code>.
      */
-    public TransactionHistory setTerminalCode(String terminalCode) {
-        this.terminalCode = terminalCode;
+    public TransactionHistory setOutgoingCode(String outgoingCode) {
+        this.outgoingCode = outgoingCode;
+        return this;
+    }
+
+    /**
+     * Getter for <code>money_transfer.transaction_history.status_name</code>.
+     */
+    public String getStatusName() {
+        return this.statusName;
+    }
+
+    /**
+     * Setter for <code>money_transfer.transaction_history.status_name</code>.
+     */
+    public TransactionHistory setStatusName(String statusName) {
+        this.statusName = statusName;
+        return this;
+    }
+
+    /**
+     * Getter for <code>money_transfer.transaction_history.currency_name</code>.
+     */
+    public String getCurrencyName() {
+        return this.currencyName;
+    }
+
+    /**
+     * Setter for <code>money_transfer.transaction_history.currency_name</code>.
+     */
+    public TransactionHistory setCurrencyName(String currencyName) {
+        this.currencyName = currencyName;
+        return this;
+    }
+
+    /**
+     * Getter for <code>money_transfer.transaction_history.type_name</code>.
+     */
+    public String getTypeName() {
+        return this.typeName;
+    }
+
+    /**
+     * Setter for <code>money_transfer.transaction_history.type_name</code>.
+     */
+    public TransactionHistory setTypeName(String typeName) {
+        this.typeName = typeName;
         return this;
     }
 
@@ -258,7 +315,10 @@ public class TransactionHistory implements Serializable {
         sb.append(", ").append(statusId);
         sb.append(", ").append(createdAt);
         sb.append(", ").append(description);
-        sb.append(", ").append(terminalCode);
+        sb.append(", ").append(outgoingCode);
+        sb.append(", ").append(statusName);
+        sb.append(", ").append(currencyName);
+        sb.append(", ").append(typeName);
 
         sb.append(")");
         return sb.toString();

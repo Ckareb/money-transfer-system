@@ -51,8 +51,7 @@ class TransactionServiceTest {
     void setTransactionTypeId() {
         TransactionType.TRANSFER.setTransactionTypeId(1L);
         TransactionType.PAYMENT.setTransactionTypeId(2L);
-        TransactionType.WITHDRAW.setTransactionTypeId(3L);
-        TransactionType.DEPOSIT.setTransactionTypeId(4L);
+        TransactionType.DEPOSIT.setTransactionTypeId(3L);
     }
 
     @BeforeEach
@@ -66,7 +65,6 @@ class TransactionServiceTest {
         // Настраиваем стратегии на свои typeId
         Mockito.when(transferStrategy.getTransactionTypeId()).thenReturn(TransactionType.TRANSFER.getTransactionTypeId());
         Mockito.when(paymentStrategy.getTransactionTypeId()).thenReturn(TransactionType.PAYMENT.getTransactionTypeId());
-        Mockito.when(withdrawStrategy.getTransactionTypeId()).thenReturn(TransactionType.WITHDRAW.getTransactionTypeId());
         Mockito.when(depositStrategy.getTransactionTypeId()).thenReturn(TransactionType.DEPOSIT.getTransactionTypeId());
 
         // Создаем TransactionService с полным списком стратегий
@@ -138,35 +136,6 @@ class TransactionServiceTest {
         Assertions.assertEquals(expected.getBody().getMessage(), actual.getBody().getMessage());
 
         Mockito.verify(paymentStrategy, Mockito.times(1)).transaction(dto);
-    }
-
-    @Test
-    void shouldReturnResponseEntityWhenTransactionIsWithdraw() {
-        TransactionDto dto = new TransactionDto();
-        dto.setTypeId(TransactionType.WITHDRAW.getTransactionTypeId());
-        dto.setNumberFrom("ACC10002");
-        dto.setNumberTo("ACC10001");
-        dto.setAmount(BigDecimal.valueOf(200.00));
-        dto.setCurrencyId(CurrencyType.RUB.getCurrencyTypeId());
-
-        ResponseEntity<ResponseInfo> expected = new ResponseEntity<>(
-                new ResponseInfo(
-                        "Сумма " + dto.getAmount() + " снята со счета успешно успешно",
-                        LocalDateTime.now(),
-                        TransactionStatus.SUCCESS.getDescription()
-                ), HttpStatus.OK);
-
-        Mockito.when(accountService.canTransaction(anyString())).thenReturn(true);
-
-        Mockito.when(withdrawStrategy.transaction(dto)).thenReturn(expected);
-
-        ResponseEntity<ResponseInfo> actual = transactionService.transaction(dto);
-
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(HttpStatus.OK, actual.getStatusCode());
-        Assertions.assertEquals(expected.getBody().getMessage(), actual.getBody().getMessage());
-
-        Mockito.verify(withdrawStrategy, Mockito.times(1)).transaction(dto);
     }
 
     @Test

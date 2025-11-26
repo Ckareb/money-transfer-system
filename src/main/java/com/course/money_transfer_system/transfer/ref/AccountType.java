@@ -5,10 +5,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 import lombok.Setter;
 
-public enum TransactionType {
-    TRANSFER,
-    PAYMENT,
-    DEPOSIT;
+public enum AccountType {
+    SETTLEMENT;
 
 
     private Long id;
@@ -21,23 +19,22 @@ public enum TransactionType {
     @Getter
     private String name;
 
-
-    public void setTransactionTypeId(Long id) {
+    public void setAccountTypeId(Long id) {
         if (this.id == null)
             this.id = id;
     }
 
     @JsonValue
-    public Long getTransactionTypeId() {
+    public Long getAccountTypeId() {
         return id;
     }
 
-    public static void fill(Long id, String typeCode, String description, String name) {
-        TransactionType transactionType = TransactionType.valueOf(typeCode.toUpperCase());
-        if(transactionType.getTransactionTypeId() == null){
-            transactionType.setTransactionTypeId(id);
-            transactionType.setDescription(description);
-            transactionType.setName(name);
+    public static void fill(Long id, String AccountCode, String description, String name) {
+        AccountType accountType = AccountType.valueOf(AccountCode.toUpperCase());
+        if(accountType.getAccountTypeId() == null){
+            accountType.setName(name);
+            accountType.setAccountTypeId(id);
+            accountType.setDescription(description);
         }
     }
 

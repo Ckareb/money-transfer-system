@@ -4,13 +4,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-public class AccountModifyAccessDto {
+public class AccountAccessDto {
     @Schema(description = "Просмотр")
     private boolean readList;
 
-    @Schema(description = "Изменение")
-    private boolean change;
-
-    @Schema(description = "Удаление")
-    private boolean delete;
+    @Schema(description = "Создание")
+    private boolean create;
 }

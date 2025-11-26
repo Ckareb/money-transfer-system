@@ -7,11 +7,15 @@ package jooq.money_transfer;
 import jooq.auth.tables.UserAccount;
 import jooq.auth.tables.records.UserAccountRecord;
 import jooq.money_transfer.tables.Account;
+import jooq.money_transfer.tables.AccountStatus;
+import jooq.money_transfer.tables.AccountType;
 import jooq.money_transfer.tables.CurrencyType;
 import jooq.money_transfer.tables.TransactionHistory;
 import jooq.money_transfer.tables.TransactionStatus;
 import jooq.money_transfer.tables.TransactionType;
 import jooq.money_transfer.tables.records.AccountRecord;
+import jooq.money_transfer.tables.records.AccountStatusRecord;
+import jooq.money_transfer.tables.records.AccountTypeRecord;
 import jooq.money_transfer.tables.records.CurrencyTypeRecord;
 import jooq.money_transfer.tables.records.TransactionHistoryRecord;
 import jooq.money_transfer.tables.records.TransactionStatusRecord;
@@ -38,6 +42,10 @@ public class Keys {
 
     public static final UniqueKey<AccountRecord> ACCOUNT_ACCOUNT_NUMBER_KEY = Internal.createUniqueKey(Account.ACCOUNT, DSL.name("account_account_number_key"), new TableField[] { Account.ACCOUNT.ACCOUNT_NUMBER }, true);
     public static final UniqueKey<AccountRecord> ACCOUNT_PK = Internal.createUniqueKey(Account.ACCOUNT, DSL.name("account_pk"), new TableField[] { Account.ACCOUNT.ID }, true);
+    public static final UniqueKey<AccountStatusRecord> ACCOUNT_STATUS_PKEY = Internal.createUniqueKey(AccountStatus.ACCOUNT_STATUS, DSL.name("account_status_pkey"), new TableField[] { AccountStatus.ACCOUNT_STATUS.ID }, true);
+    public static final UniqueKey<AccountStatusRecord> ACCOUNT_STATUS_STATUS_CODE_KEY = Internal.createUniqueKey(AccountStatus.ACCOUNT_STATUS, DSL.name("account_status_status_code_key"), new TableField[] { AccountStatus.ACCOUNT_STATUS.STATUS_CODE }, true);
+    public static final UniqueKey<AccountTypeRecord> ACCOUNT_TYPE_PKEY = Internal.createUniqueKey(AccountType.ACCOUNT_TYPE, DSL.name("account_type_pkey"), new TableField[] { AccountType.ACCOUNT_TYPE.ID }, true);
+    public static final UniqueKey<AccountTypeRecord> ACCOUNT_TYPE_TYPE_CODE_KEY = Internal.createUniqueKey(AccountType.ACCOUNT_TYPE, DSL.name("account_type_type_code_key"), new TableField[] { AccountType.ACCOUNT_TYPE.TYPE_CODE }, true);
     public static final UniqueKey<CurrencyTypeRecord> CURRENCY_TYPE_CODE_KEY = Internal.createUniqueKey(CurrencyType.CURRENCY_TYPE, DSL.name("currency_type_code_key"), new TableField[] { CurrencyType.CURRENCY_TYPE.CURRENCY_CODE }, true);
     public static final UniqueKey<CurrencyTypeRecord> CURRENCY_TYPE_PKEY = Internal.createUniqueKey(CurrencyType.CURRENCY_TYPE, DSL.name("currency_type_pkey"), new TableField[] { CurrencyType.CURRENCY_TYPE.ID }, true);
     public static final UniqueKey<TransactionHistoryRecord> TRANSACTION_HISTORY_PK = Internal.createUniqueKey(TransactionHistory.TRANSACTION_HISTORY, DSL.name("transaction_history_pk"), new TableField[] { TransactionHistory.TRANSACTION_HISTORY.ID }, true);
@@ -50,11 +58,10 @@ public class Keys {
     // FOREIGN KEY definitions
     // -------------------------------------------------------------------------
 
+    public static final ForeignKey<AccountRecord, AccountStatusRecord> ACCOUNT__ACCOUNT_STATUS_FK = Internal.createForeignKey(Account.ACCOUNT, DSL.name("account_status_fk"), new TableField[] { Account.ACCOUNT.STATUS_ID }, Keys.ACCOUNT_STATUS_PKEY, new TableField[] { AccountStatus.ACCOUNT_STATUS.ID }, true, ForeignKeyRule.NO_ACTION, ForeignKeyRule.NO_ACTION);
+    public static final ForeignKey<AccountRecord, AccountTypeRecord> ACCOUNT__ACCOUNT_TYPE_FK = Internal.createForeignKey(Account.ACCOUNT, DSL.name("account_type_fk"), new TableField[] { Account.ACCOUNT.TYPE_ID }, Keys.ACCOUNT_TYPE_PKEY, new TableField[] { AccountType.ACCOUNT_TYPE.ID }, true, ForeignKeyRule.NO_ACTION, ForeignKeyRule.NO_ACTION);
     public static final ForeignKey<AccountRecord, CurrencyTypeRecord> ACCOUNT__CURRENCY_TYPE_FK = Internal.createForeignKey(Account.ACCOUNT, DSL.name("currency_type_fk"), new TableField[] { Account.ACCOUNT.CURRENCY }, Keys.CURRENCY_TYPE_PKEY, new TableField[] { CurrencyType.CURRENCY_TYPE.ID }, true, ForeignKeyRule.NO_ACTION, ForeignKeyRule.NO_ACTION);
     public static final ForeignKey<AccountRecord, UserAccountRecord> ACCOUNT__USER_ACCOUNT_FK1 = Internal.createForeignKey(Account.ACCOUNT, DSL.name("user_account_fk1"), new TableField[] { Account.ACCOUNT.USER_ACCOUNT_ID }, jooq.auth.Keys.USER_ACCOUNT_PK, new TableField[] { UserAccount.USER_ACCOUNT.ID }, true, ForeignKeyRule.NO_ACTION, ForeignKeyRule.NO_ACTION);
-    public static final ForeignKey<TransactionHistoryRecord, CurrencyTypeRecord> TRANSACTION_HISTORY__CURRENCY_TYPE_FK = Internal.createForeignKey(TransactionHistory.TRANSACTION_HISTORY, DSL.name("currency_type_fk"), new TableField[] { TransactionHistory.TRANSACTION_HISTORY.CURRENCY }, Keys.CURRENCY_TYPE_PKEY, new TableField[] { CurrencyType.CURRENCY_TYPE.ID }, true, ForeignKeyRule.NO_ACTION, ForeignKeyRule.NO_ACTION);
     public static final ForeignKey<TransactionHistoryRecord, AccountRecord> TRANSACTION_HISTORY__FROM_ACCOUNT_FK = Internal.createForeignKey(TransactionHistory.TRANSACTION_HISTORY, DSL.name("from_account_fk"), new TableField[] { TransactionHistory.TRANSACTION_HISTORY.FROM_ACCOUNT_ID }, Keys.ACCOUNT_PK, new TableField[] { Account.ACCOUNT.ID }, true, ForeignKeyRule.NO_ACTION, ForeignKeyRule.NO_ACTION);
     public static final ForeignKey<TransactionHistoryRecord, AccountRecord> TRANSACTION_HISTORY__TO_ACCOUNT_FK = Internal.createForeignKey(TransactionHistory.TRANSACTION_HISTORY, DSL.name("to_account_fk"), new TableField[] { TransactionHistory.TRANSACTION_HISTORY.TO_ACCOUNT_ID }, Keys.ACCOUNT_PK, new TableField[] { Account.ACCOUNT.ID }, true, ForeignKeyRule.NO_ACTION, ForeignKeyRule.NO_ACTION);
-    public static final ForeignKey<TransactionHistoryRecord, TransactionStatusRecord> TRANSACTION_HISTORY__TRANSACTION_STATUS_FK = Internal.createForeignKey(TransactionHistory.TRANSACTION_HISTORY, DSL.name("transaction_status_fk"), new TableField[] { TransactionHistory.TRANSACTION_HISTORY.STATUS_ID }, Keys.TRANSACTION_STATUS_PKEY, new TableField[] { TransactionStatus.TRANSACTION_STATUS.ID }, true, ForeignKeyRule.NO_ACTION, ForeignKeyRule.NO_ACTION);
-    public static final ForeignKey<TransactionHistoryRecord, TransactionTypeRecord> TRANSACTION_HISTORY__TRANSACTION_TYPE_FK = Internal.createForeignKey(TransactionHistory.TRANSACTION_HISTORY, DSL.name("transaction_type_fk"), new TableField[] { TransactionHistory.TRANSACTION_HISTORY.TYPE_ID }, Keys.TRANSACTION_TYPE_PKEY, new TableField[] { TransactionType.TRANSACTION_TYPE.ID }, true, ForeignKeyRule.NO_ACTION, ForeignKeyRule.NO_ACTION);
 }

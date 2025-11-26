@@ -10,19 +10,14 @@ import java.util.List;
 
 import jooq.money_transfer.Keys;
 import jooq.money_transfer.MoneyTransfer;
-import jooq.money_transfer.tables.TransactionHistory.TransactionHistoryPath;
 import jooq.money_transfer.tables.records.TransactionTypeRecord;
 
 import org.jooq.Condition;
 import org.jooq.Field;
-import org.jooq.ForeignKey;
 import org.jooq.Identity;
-import org.jooq.InverseForeignKey;
 import org.jooq.Name;
-import org.jooq.Path;
 import org.jooq.PlainSQL;
 import org.jooq.QueryPart;
-import org.jooq.Record;
 import org.jooq.SQL;
 import org.jooq.Schema;
 import org.jooq.Select;
@@ -108,39 +103,6 @@ public class TransactionType extends TableImpl<TransactionTypeRecord> {
         this(DSL.name("transaction_type"), null);
     }
 
-    public <O extends Record> TransactionType(Table<O> path, ForeignKey<O, TransactionTypeRecord> childPath, InverseForeignKey<O, TransactionTypeRecord> parentPath) {
-        super(path, childPath, parentPath, TRANSACTION_TYPE);
-    }
-
-    /**
-     * A subtype implementing {@link Path} for simplified path-based joins.
-     */
-    public static class TransactionTypePath extends TransactionType implements Path<TransactionTypeRecord> {
-
-        private static final long serialVersionUID = 1L;
-        public <O extends Record> TransactionTypePath(Table<O> path, ForeignKey<O, TransactionTypeRecord> childPath, InverseForeignKey<O, TransactionTypeRecord> parentPath) {
-            super(path, childPath, parentPath);
-        }
-        private TransactionTypePath(Name alias, Table<TransactionTypeRecord> aliased) {
-            super(alias, aliased);
-        }
-
-        @Override
-        public TransactionTypePath as(String alias) {
-            return new TransactionTypePath(DSL.name(alias), this);
-        }
-
-        @Override
-        public TransactionTypePath as(Name alias) {
-            return new TransactionTypePath(alias, this);
-        }
-
-        @Override
-        public TransactionTypePath as(Table<?> alias) {
-            return new TransactionTypePath(alias.getQualifiedName(), this);
-        }
-    }
-
     @Override
     public Schema getSchema() {
         return aliased() ? null : MoneyTransfer.MONEY_TRANSFER;
@@ -159,19 +121,6 @@ public class TransactionType extends TableImpl<TransactionTypeRecord> {
     @Override
     public List<UniqueKey<TransactionTypeRecord>> getUniqueKeys() {
         return Arrays.asList(Keys.TRANSACTION_TYPE_TYPE_CODE_KEY);
-    }
-
-    private transient TransactionHistoryPath _transactionHistory;
-
-    /**
-     * Get the implicit to-many join path to the
-     * <code>money_transfer.transaction_history</code> table
-     */
-    public TransactionHistoryPath transactionHistory() {
-        if (_transactionHistory == null)
-            _transactionHistory = new TransactionHistoryPath(this, null, Keys.TRANSACTION_HISTORY__TRANSACTION_TYPE_FK.getInverseKey());
-
-        return _transactionHistory;
     }
 
     @Override

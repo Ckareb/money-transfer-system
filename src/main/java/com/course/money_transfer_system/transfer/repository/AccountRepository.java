@@ -3,14 +3,13 @@ package com.course.money_transfer_system.transfer.repository;
 
 import com.course.money_transfer_system.transfer.dto.AccountDto;
 import com.course.money_transfer_system.transfer.model.Account;
-import com.course.money_transfer_system.transfer.ref.CurrencyType;
-import com.course.money_transfer_system.transfer.ref.TransactionStatus;
-import com.course.money_transfer_system.transfer.ref.TransactionType;
+import com.course.money_transfer_system.transfer.ref.*;
 import jakarta.annotation.PostConstruct;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static jooq.auth.Tables.USER_ACCOUNT;
@@ -45,17 +44,38 @@ public class AccountRepository {
         log.info("Currency add in project");
     }
 
-    public List<AccountDto> getAccounts(Long id){
+    @PostConstruct
+    private void fillAccountType() {
+        dsl.selectFrom(ACCOUNT_TYPE).where(ACCOUNT_TYPE.TYPE_CODE.isNotNull())
+                .fetch().forEach(r -> AccountType.fill(r.getId(), r.getTypeCode(), r.getDescription(), r.getName()));
+        log.info("Account type add in project");
+    }
+
+    @PostConstruct
+    private void fillAccountStatus() {
+        dsl.selectFrom(ACCOUNT_STATUS).where(ACCOUNT_STATUS.STATUS_CODE.isNotNull())
+                .fetch().forEach(r -> AccountStatus.fill(r.getId(), r.getStatusCode(), r.getDescription(), r.getName()));
+        log.info("Account status add in project");
+    }
+
+    public List<AccountDto> getAccounts(Long userId){
         return dsl.select(
                         ACCOUNT.ID,
                         ACCOUNT.USER_ACCOUNT_ID,
                         ACCOUNT.ACCOUNT_NUMBER,
-                        ACCOUNT.CURRENCY,
-                        ACCOUNT.BALANCE
-                        //ACCOUNT.CREATED_AT
+                        ACCOUNT.CURRENCY.as("currencyId"),
+                        CURRENCY_TYPE.NAME.as("currencyName"),
+                        CURRENCY_TYPE.DESCRIPTION.as("currencyDescription"),
+                        ACCOUNT.BALANCE,
+                        ACCOUNT.TYPE_ID.as("typeId"),
+                        ACCOUNT_TYPE.NAME.as("typeName"),
+                        ACCOUNT_TYPE.DESCRIPTION.as("typeDescription")
                 )
                 .from(ACCOUNT)
-                .where(ACCOUNT.USER_ACCOUNT_ID.eq(id))
+                .join(ACCOUNT_TYPE).on(ACCOUNT.TYPE_ID.eq(ACCOUNT_TYPE.ID))
+                .join(CURRENCY_TYPE).on(ACCOUNT.CURRENCY.eq(CURRENCY_TYPE.ID))
+                .where(ACCOUNT.USER_ACCOUNT_ID.eq(userId))
+                .and(ACCOUNT.STATUS_ID.eq(AccountStatus.ACTIVE.getAccountStatusId()))
                 .fetchInto(AccountDto.class);
     }
 
@@ -66,10 +86,10 @@ public class AccountRepository {
                     ACCOUNT.ACCOUNT_NUMBER,
                     ACCOUNT.CURRENCY,
                     ACCOUNT.BALANCE
-                //ACCOUNT.CREATED_AT
                 )
                 .from(ACCOUNT)
                 .where(ACCOUNT.ID.eq(id))
+                .and(ACCOUNT.STATUS_ID.eq(AccountStatus.ACTIVE.getAccountStatusId()))
                 .fetchOneInto(AccountDto.class);
     }
 
@@ -96,18 +116,19 @@ public class AccountRepository {
 
     public Account changeAccount(Account account){
         return dsl.update(ACCOUNT)
-                .set(ACCOUNT.USER_ACCOUNT_ID, account.getUserAccountId())
                 .set(ACCOUNT.ACCOUNT_NUMBER, account.getAccountNumber())
                 .set(ACCOUNT.CURRENCY, account.getCurrency())
-                //.set(ACCOUNT.BALANCE, account.getBalance())
+                .set(ACCOUNT.TYPE_ID, account.getTypeId())
                 .set(ACCOUNT.CREATED_AT, account.getCreatedAt())
                 .where(ACCOUNT.ID.eq(account.getId()))
                 .returning()
                 .fetchOneInto(Account.class);
     }
 
-    public int deleteAccount(Long id){
-        return dsl.deleteFrom(ACCOUNT)
+    public int closeAccount(Long id){
+        return dsl.update(ACCOUNT)
+                .set(ACCOUNT.STATUS_ID, AccountStatus.CLOSED.getAccountStatusId())
+                .set(ACCOUNT.CLOSED_AT, LocalDateTime.now())
                 .where(ACCOUNT.ID.eq(id))
                 .execute();
     }

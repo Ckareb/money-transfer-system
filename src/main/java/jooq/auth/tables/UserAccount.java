@@ -70,11 +70,6 @@ public class UserAccount extends TableImpl<UserAccountRecord> {
     public final TableField<UserAccountRecord, String> USERNAME = createField(DSL.name("username"), SQLDataType.VARCHAR(200).nullable(false), this, "");
 
     /**
-     * The column <code>auth.user_account.full_name</code>.
-     */
-    public final TableField<UserAccountRecord, String> FULL_NAME = createField(DSL.name("full_name"), SQLDataType.VARCHAR(4000), this, "");
-
-    /**
      * The column <code>auth.user_account.enabled</code>.
      */
     public final TableField<UserAccountRecord, Boolean> ENABLED = createField(DSL.name("enabled"), SQLDataType.BOOLEAN, this, "");
@@ -83,11 +78,6 @@ public class UserAccount extends TableImpl<UserAccountRecord> {
      * The column <code>auth.user_account.password</code>.
      */
     public final TableField<UserAccountRecord, String> PASSWORD = createField(DSL.name("password"), SQLDataType.VARCHAR(500).nullable(false), this, "");
-
-    /**
-     * The column <code>auth.user_account.number_phone</code>.
-     */
-    public final TableField<UserAccountRecord, String> NUMBER_PHONE = createField(DSL.name("number_phone"), SQLDataType.VARCHAR(500).nullable(false), this, "");
 
     /**
      * The column <code>auth.user_account.role_id</code>.

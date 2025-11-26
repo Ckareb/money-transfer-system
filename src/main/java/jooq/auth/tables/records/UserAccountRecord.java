@@ -49,25 +49,10 @@ public class UserAccountRecord extends UpdatableRecordImpl<UserAccountRecord> {
     }
 
     /**
-     * Setter for <code>auth.user_account.full_name</code>.
-     */
-    public UserAccountRecord setFullName(String value) {
-        set(2, value);
-        return this;
-    }
-
-    /**
-     * Getter for <code>auth.user_account.full_name</code>.
-     */
-    public String getFullName() {
-        return (String) get(2);
-    }
-
-    /**
      * Setter for <code>auth.user_account.enabled</code>.
      */
     public UserAccountRecord setEnabled(Boolean value) {
-        set(3, value);
+        set(2, value);
         return this;
     }
 
@@ -75,14 +60,14 @@ public class UserAccountRecord extends UpdatableRecordImpl<UserAccountRecord> {
      * Getter for <code>auth.user_account.enabled</code>.
      */
     public Boolean getEnabled() {
-        return (Boolean) get(3);
+        return (Boolean) get(2);
     }
 
     /**
      * Setter for <code>auth.user_account.password</code>.
      */
     public UserAccountRecord setPassword(String value) {
-        set(4, value);
+        set(3, value);
         return this;
     }
 
@@ -90,29 +75,14 @@ public class UserAccountRecord extends UpdatableRecordImpl<UserAccountRecord> {
      * Getter for <code>auth.user_account.password</code>.
      */
     public String getPassword() {
-        return (String) get(4);
-    }
-
-    /**
-     * Setter for <code>auth.user_account.number_phone</code>.
-     */
-    public UserAccountRecord setNumberPhone(String value) {
-        set(5, value);
-        return this;
-    }
-
-    /**
-     * Getter for <code>auth.user_account.number_phone</code>.
-     */
-    public String getNumberPhone() {
-        return (String) get(5);
+        return (String) get(3);
     }
 
     /**
      * Setter for <code>auth.user_account.role_id</code>.
      */
     public UserAccountRecord setRoleId(Long value) {
-        set(6, value);
+        set(4, value);
         return this;
     }
 
@@ -120,7 +90,7 @@ public class UserAccountRecord extends UpdatableRecordImpl<UserAccountRecord> {
      * Getter for <code>auth.user_account.role_id</code>.
      */
     public Long getRoleId() {
-        return (Long) get(6);
+        return (Long) get(4);
     }
 
     // -------------------------------------------------------------------------
@@ -146,15 +116,13 @@ public class UserAccountRecord extends UpdatableRecordImpl<UserAccountRecord> {
     /**
      * Create a detached, initialised UserAccountRecord
      */
-    public UserAccountRecord(Long id, String username, String fullName, Boolean enabled, String password, String numberPhone, Long roleId) {
+    public UserAccountRecord(Long id, String username, Boolean enabled, String password, Long roleId) {
         super(UserAccount.USER_ACCOUNT);
 
         setId(id);
         setUsername(username);
-        setFullName(fullName);
         setEnabled(enabled);
         setPassword(password);
-        setNumberPhone(numberPhone);
         setRoleId(roleId);
         resetTouchedOnNotNull();
     }
@@ -168,10 +136,8 @@ public class UserAccountRecord extends UpdatableRecordImpl<UserAccountRecord> {
         if (value != null) {
             setId(value.getId());
             setUsername(value.getUsername());
-            setFullName(value.getFullName());
             setEnabled(value.getEnabled());
             setPassword(value.getPassword());
-            setNumberPhone(value.getNumberPhone());
             setRoleId(value.getRoleId());
             resetTouchedOnNotNull();
         }

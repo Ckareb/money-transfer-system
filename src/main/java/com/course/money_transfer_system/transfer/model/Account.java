@@ -25,4 +25,10 @@ public class Account {
 
     @Schema(description = "дата создания")
     private LocalDateTime createdAt;
+
+    @Schema(description = "id типа счета")
+    private Long typeId;
+
+    @Schema(description = "id статуса счета")
+    private Long statusId;
 }

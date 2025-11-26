@@ -5,16 +5,14 @@ import com.course.money_transfer_system.auth.service.UserAccountService;
 import com.course.money_transfer_system.exception.AccessDeniedException;
 import com.course.money_transfer_system.exception.EntityNotFoundException;
 import com.course.money_transfer_system.exception.IncorrectParamException;
-import com.course.money_transfer_system.transfer.dto.AccountModifyAccessDto;
-import com.course.money_transfer_system.transfer.dto.AccountUseAccessDto;
+import com.course.money_transfer_system.transfer.dto.AccountAccessDto;
+import com.course.money_transfer_system.transfer.dto.AccountAccessWithIdDto;
 import com.course.money_transfer_system.transfer.dto.AccountDto;
 import com.course.money_transfer_system.transfer.mapper.AccountMapper;
 import com.course.money_transfer_system.transfer.model.Account;
 import com.course.money_transfer_system.transfer.dto.EnumDto;
 import com.course.money_transfer_system.transfer.model.ResponseInfo;
-import com.course.money_transfer_system.transfer.ref.CurrencyType;
-import com.course.money_transfer_system.transfer.ref.TransactionStatus;
-import com.course.money_transfer_system.transfer.ref.TransactionType;
+import com.course.money_transfer_system.transfer.ref.*;
 import com.course.money_transfer_system.transfer.repository.AccountRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,18 +37,18 @@ public class AccountService {
 
     /**
      * Получает данные банковских счетов
-     * @param id Id аккаунта
+     * @param userId Id пользователя аккаунта
      * @return банковские счета
      */
-    public List<AccountDto> getAccounts(Long id) {
-        if (!canUseAccounts(id) || canModifyAccounts())
+    public List<AccountDto> getAccounts(Long userId) {
+        if (!canReadListAccount())
             throw new AccessDeniedException();
 
-        if (!checkUserAccount(id)) {
-            throw new EntityNotFoundException("Данного пользователя не существует", id.toString());
+        if (!checkUserAccount(userId)) {
+            throw new EntityNotFoundException("Данного пользователя не существует", userId.toString());
         }
 
-        return accountRepository.getAccounts(id);
+        return accountRepository.getAccounts(userId);
     }
 
     /**
@@ -59,7 +57,7 @@ public class AccountService {
      * @return банковский счет
      */
     public AccountDto getAccountDto(Long id) {
-        if (!canUseAccounts(id))
+        if (!canUseAccount(id))
             throw new AccessDeniedException();
         return accountRepository.getAccountDto(id);
     }
@@ -71,14 +69,16 @@ public class AccountService {
      */
     @Transactional
     public AccountDto createAccount(AccountDto dto) {
-        if (!canModifyAccounts())
+        if (!canCreateAccount())
             throw new AccessDeniedException();
 
         checkDto(dto);
         Account account = AccountMapper.INSTANCE.toAccount(dto);
+
         //Заполняемые поля
         account.setId(null);
         account.setCreatedAt(LocalDateTime.now());
+        account.setStatusId(AccountStatus.ACTIVE.getAccountStatusId());
 
         return AccountMapper.INSTANCE.toAccountDto(accountRepository.createAccount(account));
     }
@@ -90,8 +90,9 @@ public class AccountService {
      */
     @Transactional
     public AccountDto changeAccount(AccountDto dto) {
-        if (!canModifyAccounts())
+        if (!canUseAccount(dto.getId()))
             throw new AccessDeniedException();
+
         checkDtoBeforeChange(dto.getId());
 
         checkDto(dto);
@@ -101,22 +102,22 @@ public class AccountService {
     }
 
     /**
-     * Удаляет банковский счет
+     * Закрывает банковский счет
      * @param id Id банковского счета
-     * @return статус удаления
+     * @return статус закрытия
      */
     @Transactional
-    public ResponseEntity<ResponseInfo> deleteAccount(Long id) {
-        if (!canModifyAccounts())
+    public ResponseEntity<ResponseInfo> closeAccount(Long id) {
+        if (!canUseAccount(id))
             throw new AccessDeniedException();
 
         checkDtoBeforeChange(id);
 
-        int result = accountRepository.deleteAccount(id);
+        int result = accountRepository.closeAccount(id);
         if (result > 0) {
             return new ResponseEntity<>(
                     new ResponseInfo(
-                            "Данная позиция успешная удалена",
+                            "Счет успешно закрыт",
                             LocalDateTime.now(),
                             TransactionStatus.SUCCESS.getDescription(),
                             TransactionStatus.SUCCESS.getName().toUpperCase()
@@ -126,7 +127,7 @@ public class AccountService {
         } else {
             return new ResponseEntity<>(
                     new ResponseInfo(
-                            "Произошла ошибка удаления ",
+                            "Произошла ошибка при закрытии счета ",
                             LocalDateTime.now(),
                             TransactionStatus.FAILED.getDescription(),
                             TransactionStatus.FAILED.getName().toUpperCase()
@@ -150,6 +151,14 @@ public class AccountService {
      */
     public List<EnumDto> getCurrencyType() {
         return Arrays.stream(CurrencyType.values()).map(CurrencyType::getEnumDto).toList();
+    }
+
+    /**
+     * Получает тип счета
+     * @return тип счета
+     */
+    public List<EnumDto> getAccountType() {
+        return Arrays.stream(AccountType.values()).map(AccountType::getEnumDto).toList();
     }
 
     /**
@@ -180,9 +189,9 @@ public class AccountService {
     }
 
     /**
-     * Получает id пользователя
-     * @param accountNumber номер аккаунта
-     * @return id пользователя
+     * Получает id счета
+     * @param accountNumber номер счета
+     * @return id счета
      */
     protected Long getAccountId(String accountNumber){
         return accountRepository.getAccountId(accountNumber);
@@ -196,8 +205,17 @@ public class AccountService {
         boolean existsCurrencyType = false;
 
         for (CurrencyType type : CurrencyType.values()) {
-            if (dto.getCurrency().equals(type.getCurrencyTypeId())) {
+            if (dto.getCurrencyId().equals(type.getCurrencyTypeId())) {
                 existsCurrencyType = true;
+                break;
+            }
+        }
+
+        boolean existsAccountType = false;
+
+        for (AccountType type : AccountType.values()) {
+            if (dto.getTypeId().equals(type.getAccountTypeId())) {
+                existsAccountType = true;
                 break;
             }
         }
@@ -210,8 +228,11 @@ public class AccountService {
             throw new IncorrectParamException("Номер счета уже существует", dto.getAccountNumber(), "accountNumber");
         }
 
-        if (dto.getCurrency() == null || !existsCurrencyType)
-            throw new IncorrectParamException("Данная валюта не поддерживается", dto.getCurrency() != null ? dto.getCurrency().toString() : null, "currency");
+        if (dto.getCurrencyId() == null || !existsCurrencyType)
+            throw new IncorrectParamException("Данная валюта не поддерживается", dto.getCurrencyId() != null ? dto.getCurrencyId().toString() : null, "currency");
+
+        if (dto.getTypeId() == null || !existsAccountType)
+            throw new IncorrectParamException("Данный тип счета не поддерживается", dto.getTypeId() != null ? dto.getTypeId().toString() : null, "typeId");
     }
 
     private void checkDtoBeforeChange(Long id) {
@@ -220,45 +241,49 @@ public class AccountService {
         }
 
         if (!checkBalance(accountRepository.getAccount(id).getBalance())) {
-            throw new IncorrectParamException("Балан перед удалением/изменением должен быть равен 0");
+            throw new IncorrectParamException("Балан счета перед удалением/изменением должен быть равен 0");
         }
     }
 
     public boolean canTransaction(String numberFrom){
-        return canUseAccounts(getAccountId(numberFrom));
+        return canUseAccount(getAccountId(numberFrom));
     }
 
-    private boolean canUseAccounts(Long id){
+    private boolean canUseAccount(Long id){
         return isUser(accountRepository.getAccount(id));
     }
 
     private boolean isUser(Account account) {
-        System.out.println(userAccountService.findUserId());
         return account != null && AccessService.isUser() &&
                 account.getUserAccountId() != null &&
                 account.getUserAccountId().equals(userAccountService.findUserId().getId());
     }
 
-    private boolean canModifyAccounts(){
-        return AccessService.isAdmin();
+    private boolean canCreateAccount(){
+        return AccessService.isUser();
     }
 
-    public AccountModifyAccessDto getModifyAccess() {
-        AccountModifyAccessDto access = new AccountModifyAccessDto();
-
-        access.setReadList(canModifyAccounts());
-        access.setChange(canModifyAccounts());
-        access.setDelete(canModifyAccounts());
-
-        return access;
+    private boolean canReadListAccount(){
+        return AccessService.isUser() || AccessService.isAdmin();
     }
 
-    public AccountUseAccessDto getUseAccess(Long id) {
-        AccountUseAccessDto access = new AccountUseAccessDto();
+    public AccountAccessDto getAccess() {
+        AccountAccessDto dto = new AccountAccessDto();
 
-        access.setRead(canUseAccounts(id));
-        access.setTransfer(canUseAccounts(id));
+        dto.setReadList(canReadListAccount());
+        dto.setCreate(canCreateAccount());
 
-        return access;
+        return dto;
+    }
+
+    public AccountAccessWithIdDto getAccessWithId(Long id) {
+        AccountAccessWithIdDto dto = new AccountAccessWithIdDto();
+
+        dto.setRead(canUseAccount(id));
+        dto.setTransfer(canUseAccount(id));
+        dto.setChange(canUseAccount(id));
+        dto.setDelete(canUseAccount(id));
+
+        return dto;
     }
 }

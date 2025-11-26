@@ -13,9 +13,6 @@ import java.util.List;
 import jooq.money_transfer.Keys;
 import jooq.money_transfer.MoneyTransfer;
 import jooq.money_transfer.tables.Account.AccountPath;
-import jooq.money_transfer.tables.CurrencyType.CurrencyTypePath;
-import jooq.money_transfer.tables.TransactionStatus.TransactionStatusPath;
-import jooq.money_transfer.tables.TransactionType.TransactionTypePath;
 import jooq.money_transfer.tables.records.TransactionHistoryRecord;
 
 import org.jooq.Check;
@@ -111,9 +108,24 @@ public class TransactionHistory extends TableImpl<TransactionHistoryRecord> {
     public final TableField<TransactionHistoryRecord, String> DESCRIPTION = createField(DSL.name("description"), SQLDataType.VARCHAR(4000), this, "");
 
     /**
-     * The column <code>money_transfer.transaction_history.terminal_code</code>.
+     * The column <code>money_transfer.transaction_history.outgoing_code</code>.
      */
-    public final TableField<TransactionHistoryRecord, String> TERMINAL_CODE = createField(DSL.name("terminal_code"), SQLDataType.VARCHAR(100), this, "");
+    public final TableField<TransactionHistoryRecord, String> OUTGOING_CODE = createField(DSL.name("outgoing_code"), SQLDataType.VARCHAR(100), this, "");
+
+    /**
+     * The column <code>money_transfer.transaction_history.status_name</code>.
+     */
+    public final TableField<TransactionHistoryRecord, String> STATUS_NAME = createField(DSL.name("status_name"), SQLDataType.VARCHAR(50).nullable(false), this, "");
+
+    /**
+     * The column <code>money_transfer.transaction_history.currency_name</code>.
+     */
+    public final TableField<TransactionHistoryRecord, String> CURRENCY_NAME = createField(DSL.name("currency_name"), SQLDataType.VARCHAR(50).nullable(false), this, "");
+
+    /**
+     * The column <code>money_transfer.transaction_history.type_name</code>.
+     */
+    public final TableField<TransactionHistoryRecord, String> TYPE_NAME = createField(DSL.name("type_name"), SQLDataType.VARCHAR(50), this, "");
 
     private TransactionHistory(Name alias, Table<TransactionHistoryRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
@@ -196,20 +208,7 @@ public class TransactionHistory extends TableImpl<TransactionHistoryRecord> {
 
     @Override
     public List<ForeignKey<TransactionHistoryRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.TRANSACTION_HISTORY__CURRENCY_TYPE_FK, Keys.TRANSACTION_HISTORY__FROM_ACCOUNT_FK, Keys.TRANSACTION_HISTORY__TO_ACCOUNT_FK, Keys.TRANSACTION_HISTORY__TRANSACTION_STATUS_FK, Keys.TRANSACTION_HISTORY__TRANSACTION_TYPE_FK);
-    }
-
-    private transient CurrencyTypePath _currencyType;
-
-    /**
-     * Get the implicit join path to the
-     * <code>money_transfer.currency_type</code> table.
-     */
-    public CurrencyTypePath currencyType() {
-        if (_currencyType == null)
-            _currencyType = new CurrencyTypePath(this, Keys.TRANSACTION_HISTORY__CURRENCY_TYPE_FK, null);
-
-        return _currencyType;
+        return Arrays.asList(Keys.TRANSACTION_HISTORY__FROM_ACCOUNT_FK, Keys.TRANSACTION_HISTORY__TO_ACCOUNT_FK);
     }
 
     private transient AccountPath _fromAccountFk;
@@ -236,32 +235,6 @@ public class TransactionHistory extends TableImpl<TransactionHistoryRecord> {
             _toAccountFk = new AccountPath(this, Keys.TRANSACTION_HISTORY__TO_ACCOUNT_FK, null);
 
         return _toAccountFk;
-    }
-
-    private transient TransactionStatusPath _transactionStatus;
-
-    /**
-     * Get the implicit join path to the
-     * <code>money_transfer.transaction_status</code> table.
-     */
-    public TransactionStatusPath transactionStatus() {
-        if (_transactionStatus == null)
-            _transactionStatus = new TransactionStatusPath(this, Keys.TRANSACTION_HISTORY__TRANSACTION_STATUS_FK, null);
-
-        return _transactionStatus;
-    }
-
-    private transient TransactionTypePath _transactionType;
-
-    /**
-     * Get the implicit join path to the
-     * <code>money_transfer.transaction_type</code> table.
-     */
-    public TransactionTypePath transactionType() {
-        if (_transactionType == null)
-            _transactionType = new TransactionTypePath(this, Keys.TRANSACTION_HISTORY__TRANSACTION_TYPE_FK, null);
-
-        return _transactionType;
     }
 
     @Override
