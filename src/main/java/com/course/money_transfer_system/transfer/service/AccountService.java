@@ -14,6 +14,7 @@ import com.course.money_transfer_system.transfer.dto.EnumDto;
 import com.course.money_transfer_system.transfer.model.ResponseInfo;
 import com.course.money_transfer_system.transfer.ref.*;
 import com.course.money_transfer_system.transfer.repository.AccountRepository;
+import com.course.money_transfer_system.user.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -28,11 +29,14 @@ import java.util.List;
 public class AccountService {
     private final AccountRepository accountRepository;
     private final UserAccountService userAccountService;
+    private final UserRepository userRepository;
 
     public AccountService(AccountRepository accountRepository,
-                          UserAccountService userAccountService) {
+                          UserAccountService userAccountService,
+                          UserRepository userRepository) {
         this.accountRepository = accountRepository;
         this.userAccountService = userAccountService;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -185,7 +189,7 @@ public class AccountService {
      * @return true/false
      */
     private boolean checkUserAccount(Long id) {
-        return accountRepository.existUser(id);
+        return userRepository.existUser(id);
     }
 
     /**

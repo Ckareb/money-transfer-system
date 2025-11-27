@@ -120,4 +120,13 @@ public class UserRepository {
                 .and(USER_ACCOUNT.ROLE_ID.eq(RoleType.USER.getRoleTypeId()))
                 .execute();
     }
+
+
+    public boolean existUser(Long id){
+        return dsl.fetchExists(
+                selectOne()
+                        .from(USER_ACCOUNT)
+                        .where(USER_ACCOUNT.ID.eq(id))
+        );
+    }
 }

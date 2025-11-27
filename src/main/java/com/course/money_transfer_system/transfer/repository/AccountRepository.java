@@ -104,6 +104,7 @@ public class AccountRepository {
                 )
                 .from(ACCOUNT)
                 .where(ACCOUNT.ID.eq(id))
+                .and(ACCOUNT.STATUS_ID.eq(AccountStatus.ACTIVE.getAccountStatusId()))
                 .fetchOneInto(Account.class);
     }
 
@@ -138,14 +139,6 @@ public class AccountRepository {
                 selectOne()
                         .from(ACCOUNT)
                         .where(ACCOUNT.ACCOUNT_NUMBER.eq(accountNumber.toUpperCase()))
-        );
-    }
-
-    public boolean existUser(Long id){
-        return dsl.fetchExists(
-                selectOne()
-                        .from(USER_ACCOUNT)
-                        .where(USER_ACCOUNT.ID.eq(id))
         );
     }
 

@@ -115,12 +115,12 @@ public class TransactionHistory extends TableImpl<TransactionHistoryRecord> {
     /**
      * The column <code>money_transfer.transaction_history.status_name</code>.
      */
-    public final TableField<TransactionHistoryRecord, String> STATUS_NAME = createField(DSL.name("status_name"), SQLDataType.VARCHAR(50).nullable(false), this, "");
+    public final TableField<TransactionHistoryRecord, String> STATUS_NAME = createField(DSL.name("status_name"), SQLDataType.VARCHAR(50), this, "");
 
     /**
      * The column <code>money_transfer.transaction_history.currency_name</code>.
      */
-    public final TableField<TransactionHistoryRecord, String> CURRENCY_NAME = createField(DSL.name("currency_name"), SQLDataType.VARCHAR(50).nullable(false), this, "");
+    public final TableField<TransactionHistoryRecord, String> CURRENCY_NAME = createField(DSL.name("currency_name"), SQLDataType.VARCHAR(50), this, "");
 
     /**
      * The column <code>money_transfer.transaction_history.type_name</code>.

@@ -20,9 +20,9 @@ public class Account implements Serializable {
     private Long id;
     private Long userAccountId;
     private String accountNumber;
-    private Long currency;
     private BigDecimal balance;
     private LocalDateTime createdAt;
+    private Long currency;
     private Long typeId;
     private Long statusId;
     private LocalDateTime closedAt;
@@ -33,9 +33,9 @@ public class Account implements Serializable {
         this.id = value.id;
         this.userAccountId = value.userAccountId;
         this.accountNumber = value.accountNumber;
-        this.currency = value.currency;
         this.balance = value.balance;
         this.createdAt = value.createdAt;
+        this.currency = value.currency;
         this.typeId = value.typeId;
         this.statusId = value.statusId;
         this.closedAt = value.closedAt;
@@ -45,9 +45,9 @@ public class Account implements Serializable {
         Long id,
         Long userAccountId,
         String accountNumber,
-        Long currency,
         BigDecimal balance,
         LocalDateTime createdAt,
+        Long currency,
         Long typeId,
         Long statusId,
         LocalDateTime closedAt
@@ -55,9 +55,9 @@ public class Account implements Serializable {
         this.id = id;
         this.userAccountId = userAccountId;
         this.accountNumber = accountNumber;
-        this.currency = currency;
         this.balance = balance;
         this.createdAt = createdAt;
+        this.currency = currency;
         this.typeId = typeId;
         this.statusId = statusId;
         this.closedAt = closedAt;
@@ -109,21 +109,6 @@ public class Account implements Serializable {
     }
 
     /**
-     * Getter for <code>money_transfer.account.currency</code>.
-     */
-    public Long getCurrency() {
-        return this.currency;
-    }
-
-    /**
-     * Setter for <code>money_transfer.account.currency</code>.
-     */
-    public Account setCurrency(Long currency) {
-        this.currency = currency;
-        return this;
-    }
-
-    /**
      * Getter for <code>money_transfer.account.balance</code>.
      */
     public BigDecimal getBalance() {
@@ -150,6 +135,21 @@ public class Account implements Serializable {
      */
     public Account setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+        return this;
+    }
+
+    /**
+     * Getter for <code>money_transfer.account.currency</code>.
+     */
+    public Long getCurrency() {
+        return this.currency;
+    }
+
+    /**
+     * Setter for <code>money_transfer.account.currency</code>.
+     */
+    public Account setCurrency(Long currency) {
+        this.currency = currency;
         return this;
     }
 
@@ -231,9 +231,9 @@ public class Account implements Serializable {
         sb.append(id);
         sb.append(", ").append(userAccountId);
         sb.append(", ").append(accountNumber);
-        sb.append(", ").append(currency);
         sb.append(", ").append(balance);
         sb.append(", ").append(createdAt);
+        sb.append(", ").append(currency);
         sb.append(", ").append(typeId);
         sb.append(", ").append(statusId);
         sb.append(", ").append(closedAt);
