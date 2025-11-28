@@ -1,6 +1,6 @@
 package com.course.money_transfer_system.user.controller;
 
-import com.course.money_transfer_system.transfer.model.ResponseInfo;
+import com.course.money_transfer_system.exception.ResponseInfo;
 import com.course.money_transfer_system.user.dto.UserAccessDto;
 import com.course.money_transfer_system.user.dto.UserDataDto;
 import com.course.money_transfer_system.user.dto.UserDto;

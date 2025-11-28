@@ -1,6 +1,5 @@
 package com.course.money_transfer_system.exception;
 
-import com.course.money_transfer_system.transfer.model.ResponseInfo;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

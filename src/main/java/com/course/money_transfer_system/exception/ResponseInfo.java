@@ -1,4 +1,4 @@
-package com.course.money_transfer_system.transfer.model;
+package com.course.money_transfer_system.exception;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;

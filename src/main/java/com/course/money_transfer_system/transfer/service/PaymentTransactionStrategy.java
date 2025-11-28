@@ -1,18 +1,16 @@
 package com.course.money_transfer_system.transfer.service;
 
 import com.course.money_transfer_system.transfer.dto.TransactionDto;
-import com.course.money_transfer_system.transfer.model.ResponseInfo;
+import com.course.money_transfer_system.exception.ResponseInfo;
 import com.course.money_transfer_system.transfer.ref.TransactionStatus;
 import com.course.money_transfer_system.transfer.ref.TransactionType;
 import com.course.money_transfer_system.transfer.repository.TransactionRepository;
 import com.course.money_transfer_system.transfer.strategy.TransactionStrategy;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Component

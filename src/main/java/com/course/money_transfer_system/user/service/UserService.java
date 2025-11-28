@@ -3,7 +3,7 @@ package com.course.money_transfer_system.user.service;
 import com.course.money_transfer_system.auth.service.AccessService;
 import com.course.money_transfer_system.exception.AccessDeniedException;
 import com.course.money_transfer_system.exception.IncorrectParamException;
-import com.course.money_transfer_system.transfer.model.ResponseInfo;
+import com.course.money_transfer_system.exception.ResponseInfo;
 import com.course.money_transfer_system.user.dto.UserAccessDto;
 import com.course.money_transfer_system.user.dto.UserDataDto;
 import com.course.money_transfer_system.user.dto.UserDto;

@@ -2,7 +2,7 @@ package com.course.money_transfer_system.transfer.service;
 
 import com.course.money_transfer_system.exception.EntityNotFoundException;
 import com.course.money_transfer_system.transfer.dto.TransactionDto;
-import com.course.money_transfer_system.transfer.model.ResponseInfo;
+import com.course.money_transfer_system.exception.ResponseInfo;
 import com.course.money_transfer_system.transfer.ref.CurrencyType;
 import com.course.money_transfer_system.transfer.ref.TransactionStatus;
 import com.course.money_transfer_system.transfer.ref.TransactionType;

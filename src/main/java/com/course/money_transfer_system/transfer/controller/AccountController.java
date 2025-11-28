@@ -1,7 +1,7 @@
 package com.course.money_transfer_system.transfer.controller;
 
 import com.course.money_transfer_system.transfer.dto.*;
-import com.course.money_transfer_system.transfer.model.ResponseInfo;
+import com.course.money_transfer_system.exception.ResponseInfo;
 import com.course.money_transfer_system.transfer.service.AccountService;
 import com.course.money_transfer_system.transfer.service.TransactionHistoryService;
 import com.course.money_transfer_system.transfer.service.TransactionService;

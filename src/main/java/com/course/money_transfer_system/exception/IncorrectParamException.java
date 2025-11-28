@@ -1,9 +1,5 @@
 package com.course.money_transfer_system.exception;
 
-import com.course.money_transfer_system.transfer.model.ResponseInfo;
-
-import java.time.LocalDateTime;
-
 public class IncorrectParamException extends RuntimeException {
 
     private String fieldOne;

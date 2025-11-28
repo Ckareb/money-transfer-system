@@ -11,7 +11,7 @@ import com.course.money_transfer_system.transfer.dto.AccountDto;
 import com.course.money_transfer_system.transfer.mapper.AccountMapper;
 import com.course.money_transfer_system.transfer.model.Account;
 import com.course.money_transfer_system.transfer.dto.EnumDto;
-import com.course.money_transfer_system.transfer.model.ResponseInfo;
+import com.course.money_transfer_system.exception.ResponseInfo;
 import com.course.money_transfer_system.transfer.ref.*;
 import com.course.money_transfer_system.transfer.repository.AccountRepository;
 import com.course.money_transfer_system.user.repository.UserRepository;
