@@ -70,7 +70,7 @@ public class TransactionType extends TableImpl<TransactionTypeRecord> {
     /**
      * The column <code>money_transfer.transaction_type.name</code>.
      */
-    public final TableField<TransactionTypeRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(20), this, "");
+    public final TableField<TransactionTypeRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(100), this, "");
 
     private TransactionType(Name alias, Table<TransactionTypeRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);

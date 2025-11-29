@@ -1,9 +1,6 @@
 package com.course.money_transfer_system.transfer.repository;
 
 import com.course.money_transfer_system.transfer.dto.TransactionDto;
-import com.course.money_transfer_system.transfer.dto.TransactionHistoryDto;
-import com.course.money_transfer_system.transfer.model.TransactionHistory;
-import com.course.money_transfer_system.transfer.ref.TransactionStatus;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

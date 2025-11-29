@@ -11,7 +11,9 @@ import com.course.money_transfer_system.transfer.dto.AccountDto;
 import com.course.money_transfer_system.transfer.mapper.AccountMapper;
 import com.course.money_transfer_system.transfer.model.Account;
 import com.course.money_transfer_system.transfer.dto.EnumDto;
+import com.course.money_transfer_system.transfer.model.TypeInfo;
 import com.course.money_transfer_system.exception.ResponseInfo;
+
 import com.course.money_transfer_system.transfer.ref.*;
 import com.course.money_transfer_system.transfer.repository.AccountRepository;
 import com.course.money_transfer_system.user.repository.UserRepository;
@@ -22,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -30,13 +31,28 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final UserAccountService userAccountService;
     private final UserRepository userRepository;
+    private final TransactionTypeRegistry transactionTypeRegistry;
+    private final CurrencyTypeRegistry currencyTypeRegistry;
+    private final TransactionStatusRegistry transactionStatusRegistry;
+    private final AccountTypeRegistry accountTypeRegistry;
+    private final AccountStatusRegistry accountStatusRegistry;
 
     public AccountService(AccountRepository accountRepository,
                           UserAccountService userAccountService,
-                          UserRepository userRepository) {
+                          UserRepository userRepository,
+                          TransactionTypeRegistry transactionTypeRegistry,
+                          CurrencyTypeRegistry currencyTypeRegistry,
+                          TransactionStatusRegistry transactionStatusRegistry,
+                          AccountTypeRegistry accountTypeRegistry,
+                          AccountStatusRegistry accountStatusRegistry) {
         this.accountRepository = accountRepository;
         this.userAccountService = userAccountService;
         this.userRepository = userRepository;
+        this.transactionTypeRegistry = transactionTypeRegistry;
+        this.currencyTypeRegistry = currencyTypeRegistry;
+        this.transactionStatusRegistry = transactionStatusRegistry;
+        this.accountTypeRegistry = accountTypeRegistry;
+        this.accountStatusRegistry = accountStatusRegistry;
     }
 
     /**
@@ -82,7 +98,7 @@ public class AccountService {
         //Заполняемые поля
         account.setId(null);
         account.setCreatedAt(LocalDateTime.now());
-        account.setStatusId(AccountStatus.ACTIVE.getAccountStatusId());
+        account.setStatusId(accountStatusRegistry.get("ACTIVE").getId());
 
         return AccountMapper.INSTANCE.toAccountDto(accountRepository.createAccount(account));
     }
@@ -123,8 +139,8 @@ public class AccountService {
                     new ResponseInfo(
                             "Счет успешно закрыт",
                             LocalDateTime.now(),
-                            TransactionStatus.SUCCESS.getDescription(),
-                            TransactionStatus.SUCCESS.getName().toUpperCase()
+                            transactionStatusRegistry.get("SUCCESS").getDescription(),
+                            transactionStatusRegistry.get("SUCCESS").getName().toUpperCase()
                     ),
                     HttpStatus.OK
             );
@@ -133,8 +149,8 @@ public class AccountService {
                     new ResponseInfo(
                             "Произошла ошибка при закрытии счета ",
                             LocalDateTime.now(),
-                            TransactionStatus.FAILED.getDescription(),
-                            TransactionStatus.FAILED.getName().toUpperCase()
+                            transactionStatusRegistry.get("FAILED").getDescription(),
+                            transactionStatusRegistry.get("FAILED").getName().toUpperCase()
                     ),
                     HttpStatus.NOT_FOUND
             );
@@ -146,7 +162,10 @@ public class AccountService {
      * @return типы транзакций
      */
     public List<EnumDto> getTransactionType() {
-        return Arrays.stream(TransactionType.values()).map(TransactionType::getEnumDto).toList();
+        return transactionTypeRegistry.getAll().values()
+                .stream()
+                .map(TypeInfo::getEnumDto)
+                .toList();
     }
 
     /**
@@ -154,7 +173,10 @@ public class AccountService {
      * @return тип валюты
      */
     public List<EnumDto> getCurrencyType() {
-        return Arrays.stream(CurrencyType.values()).map(CurrencyType::getEnumDto).toList();
+        return currencyTypeRegistry.getAll().values()
+                .stream()
+                .map(TypeInfo::getEnumDto)
+                .toList();
     }
 
     /**
@@ -162,7 +184,10 @@ public class AccountService {
      * @return тип счета
      */
     public List<EnumDto> getAccountType() {
-        return Arrays.stream(AccountType.values()).map(AccountType::getEnumDto).toList();
+        return accountTypeRegistry.getAll().values()
+                .stream()
+                .map(TypeInfo::getEnumDto)
+                .toList();
     }
 
     /**
@@ -208,8 +233,8 @@ public class AccountService {
     private void checkDto(AccountDto dto) {
         boolean existsCurrencyType = false;
 
-        for (CurrencyType type : CurrencyType.values()) {
-            if (dto.getCurrencyId().equals(type.getCurrencyTypeId())) {
+        for (TypeInfo type : currencyTypeRegistry.values()) {
+            if (dto.getCurrencyId().equals(type.getId())) {
                 existsCurrencyType = true;
                 break;
             }
@@ -217,8 +242,8 @@ public class AccountService {
 
         boolean existsAccountType = false;
 
-        for (AccountType type : AccountType.values()) {
-            if (dto.getTypeId().equals(type.getAccountTypeId())) {
+        for (TypeInfo type : accountTypeRegistry.values()) {
+            if (dto.getTypeId().equals(type.getId())) {
                 existsAccountType = true;
                 break;
             }

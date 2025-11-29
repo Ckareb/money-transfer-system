@@ -2,8 +2,8 @@ package com.course.money_transfer_system.transfer.service;
 
 import com.course.money_transfer_system.transfer.dto.TransactionDto;
 import com.course.money_transfer_system.exception.ResponseInfo;
-import com.course.money_transfer_system.transfer.ref.TransactionStatus;
-import com.course.money_transfer_system.transfer.ref.TransactionType;
+import com.course.money_transfer_system.transfer.ref.TransactionStatusRegistry;
+import com.course.money_transfer_system.transfer.ref.TransactionTypeRegistry;
 import com.course.money_transfer_system.transfer.repository.TransactionRepository;
 import com.course.money_transfer_system.transfer.strategy.TransactionStrategy;
 import org.springframework.http.HttpStatus;
@@ -18,15 +18,21 @@ public class PaymentTransactionStrategy implements TransactionStrategy {
 
     private final TransactionRepository transactionRepository;
     private final TransactionHistoryService transactionHistoryService;
+    private final TransactionTypeRegistry transactionTypeRegistry;
+    private final TransactionStatusRegistry transactionStatusRegistry;
 
     public PaymentTransactionStrategy(TransactionRepository transactionRepository,
-                                       TransactionHistoryService transactionHistoryService) {
+                                       TransactionHistoryService transactionHistoryService,
+                                      TransactionTypeRegistry transactionTypeRegistry,
+                                      TransactionStatusRegistry transactionStatusRegistry) {
         this.transactionRepository = transactionRepository;
         this.transactionHistoryService = transactionHistoryService;
+        this.transactionTypeRegistry = transactionTypeRegistry;
+        this.transactionStatusRegistry = transactionStatusRegistry;
     }
 
     public Long getTransactionTypeId(){
-        return TransactionType.PAYMENT.getTransactionTypeId();
+        return transactionTypeRegistry.get("PAYMENT").getId();
     }
 
     @Override
@@ -36,19 +42,19 @@ public class PaymentTransactionStrategy implements TransactionStrategy {
                 dto,
                 dto.getNumberFrom(),
                 null,
-                TransactionType.PAYMENT,
+                transactionTypeRegistry.get("PAYMENT"),
                 dto.getNumberTo()
         );
         //checkBalance(dto.getNumberFrom(), dto.getAmount());
 
         transactionRepository.transactionSubtract(dto);
-        transactionHistoryService.transactionHistoryChangeStatus(TransactionStatus.SUCCESS.getTransactionStatusId());
+        transactionHistoryService.transactionHistoryChangeStatus(transactionStatusRegistry.get("SUCCESS").getId());
 
         return new ResponseEntity<>(
                 new ResponseInfo(
                         "Оплачено успешно на сумму " + dto.getAmount(),
                         LocalDateTime.now(),
-                        TransactionStatus.SUCCESS.getDescription()
+                        transactionStatusRegistry.get("SUCCESS").getDescription()
                 ), HttpStatus.OK);
     }
 }

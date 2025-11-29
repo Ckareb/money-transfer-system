@@ -67,40 +67,10 @@ public class AccountRecord extends UpdatableRecordImpl<AccountRecord> {
     }
 
     /**
-     * Setter for <code>money_transfer.account.balance</code>.
-     */
-    public AccountRecord setBalance(BigDecimal value) {
-        set(3, value);
-        return this;
-    }
-
-    /**
-     * Getter for <code>money_transfer.account.balance</code>.
-     */
-    public BigDecimal getBalance() {
-        return (BigDecimal) get(3);
-    }
-
-    /**
-     * Setter for <code>money_transfer.account.created_at</code>.
-     */
-    public AccountRecord setCreatedAt(LocalDateTime value) {
-        set(4, value);
-        return this;
-    }
-
-    /**
-     * Getter for <code>money_transfer.account.created_at</code>.
-     */
-    public LocalDateTime getCreatedAt() {
-        return (LocalDateTime) get(4);
-    }
-
-    /**
      * Setter for <code>money_transfer.account.currency</code>.
      */
     public AccountRecord setCurrency(Long value) {
-        set(5, value);
+        set(3, value);
         return this;
     }
 
@@ -108,7 +78,37 @@ public class AccountRecord extends UpdatableRecordImpl<AccountRecord> {
      * Getter for <code>money_transfer.account.currency</code>.
      */
     public Long getCurrency() {
-        return (Long) get(5);
+        return (Long) get(3);
+    }
+
+    /**
+     * Setter for <code>money_transfer.account.balance</code>.
+     */
+    public AccountRecord setBalance(BigDecimal value) {
+        set(4, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>money_transfer.account.balance</code>.
+     */
+    public BigDecimal getBalance() {
+        return (BigDecimal) get(4);
+    }
+
+    /**
+     * Setter for <code>money_transfer.account.created_at</code>.
+     */
+    public AccountRecord setCreatedAt(LocalDateTime value) {
+        set(5, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>money_transfer.account.created_at</code>.
+     */
+    public LocalDateTime getCreatedAt() {
+        return (LocalDateTime) get(5);
     }
 
     /**
@@ -179,15 +179,15 @@ public class AccountRecord extends UpdatableRecordImpl<AccountRecord> {
     /**
      * Create a detached, initialised AccountRecord
      */
-    public AccountRecord(Long id, Long userAccountId, String accountNumber, BigDecimal balance, LocalDateTime createdAt, Long currency, Long typeId, Long statusId, LocalDateTime closedAt) {
+    public AccountRecord(Long id, Long userAccountId, String accountNumber, Long currency, BigDecimal balance, LocalDateTime createdAt, Long typeId, Long statusId, LocalDateTime closedAt) {
         super(Account.ACCOUNT);
 
         setId(id);
         setUserAccountId(userAccountId);
         setAccountNumber(accountNumber);
+        setCurrency(currency);
         setBalance(balance);
         setCreatedAt(createdAt);
-        setCurrency(currency);
         setTypeId(typeId);
         setStatusId(statusId);
         setClosedAt(closedAt);
@@ -204,9 +204,9 @@ public class AccountRecord extends UpdatableRecordImpl<AccountRecord> {
             setId(value.getId());
             setUserAccountId(value.getUserAccountId());
             setAccountNumber(value.getAccountNumber());
+            setCurrency(value.getCurrency());
             setBalance(value.getBalance());
             setCreatedAt(value.getCreatedAt());
-            setCurrency(value.getCurrency());
             setTypeId(value.getTypeId());
             setStatusId(value.getStatusId());
             setClosedAt(value.getClosedAt());

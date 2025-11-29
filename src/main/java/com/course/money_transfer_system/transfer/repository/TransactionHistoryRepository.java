@@ -1,14 +1,12 @@
 package com.course.money_transfer_system.transfer.repository;
 
-import com.course.money_transfer_system.transfer.dto.TransactionDto;
 import com.course.money_transfer_system.transfer.dto.TransactionHistoryDto;
 import com.course.money_transfer_system.transfer.model.TransactionHistory;
-import com.course.money_transfer_system.transfer.ref.TransactionStatus;
+import com.course.money_transfer_system.transfer.ref.TransactionStatusRegistry;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import static jooq.money_transfer.Tables.*;
@@ -17,6 +15,11 @@ import static jooq.money_transfer.Tables.*;
 public class TransactionHistoryRepository {
     @Autowired
     private DSLContext dsl;
+
+    private final TransactionStatusRegistry transactionStatusRegistry;
+    public TransactionHistoryRepository(TransactionStatusRegistry transactionStatusRegistry) {
+        this.transactionStatusRegistry = transactionStatusRegistry;
+    }
 
     public Long countByAccountId(Long accountId) {
         return dsl.selectCount()
@@ -49,7 +52,7 @@ public class TransactionHistoryRepository {
                 .join(CURRENCY_TYPE).on(TRANSACTION_HISTORY.CURRENCY.eq(CURRENCY_TYPE.ID))
                 .where(TRANSACTION_HISTORY.FROM_ACCOUNT_ID.eq(accountId)
                         .or(TRANSACTION_HISTORY.TO_ACCOUNT_ID.eq(accountId))
-                ).and(TRANSACTION_HISTORY.STATUS_ID.eq(TransactionStatus.SUCCESS.getTransactionStatusId()))
+                ).and(TRANSACTION_HISTORY.STATUS_ID.eq(transactionStatusRegistry.get("SUCCESS").getId()))
                 .offset(offset).limit(limit)
                 .fetchInto(TransactionHistoryDto.class);
 

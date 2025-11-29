@@ -5,8 +5,9 @@ import com.course.money_transfer_system.exception.EntityNotFoundException;
 import com.course.money_transfer_system.exception.IncorrectParamException;
 import com.course.money_transfer_system.transfer.dto.TransactionDto;
 import com.course.money_transfer_system.exception.ResponseInfo;
-import com.course.money_transfer_system.transfer.ref.CurrencyType;
-import com.course.money_transfer_system.transfer.ref.TransactionType;
+import com.course.money_transfer_system.transfer.model.TypeInfo;
+import com.course.money_transfer_system.transfer.ref.CurrencyTypeRegistry;
+import com.course.money_transfer_system.transfer.ref.TransactionTypeRegistry;
 import com.course.money_transfer_system.transfer.repository.TransactionRepository;
 import com.course.money_transfer_system.transfer.strategy.TransactionStrategy;
 import org.springframework.http.ResponseEntity;
@@ -22,15 +23,21 @@ public class TransactionService {
     private final Map<Long, TransactionStrategy> strategies = new HashMap<>();
     private final TransactionRepository transactionRepository;
     private final AccountService accountService;
+    private final TransactionTypeRegistry transactionTypeRegistry;
+    private final CurrencyTypeRegistry currencyTypeRegistry;
 
     public TransactionService(List<TransactionStrategy> strategyList,
                               TransactionRepository transactionRepository,
-                              AccountService accountService) {
+                              AccountService accountService,
+                              TransactionTypeRegistry transactionTypeRegistry,
+                              CurrencyTypeRegistry currencyTypeRegistry) {
        for (TransactionStrategy strategy : strategyList) {
            strategies.put(strategy.getTransactionTypeId(), strategy);
        }
        this.transactionRepository = transactionRepository;
        this.accountService = accountService;
+       this.transactionTypeRegistry = transactionTypeRegistry;
+       this.currencyTypeRegistry = currencyTypeRegistry;
     }
 
     public ResponseEntity<ResponseInfo> transaction(TransactionDto dto) {
@@ -50,8 +57,8 @@ public class TransactionService {
     private void checkDto(TransactionDto dto){
         boolean existsTransType = false;
 
-        for (TransactionType type : TransactionType.values()) {
-            if (dto.getTypeId().equals(type.getTransactionTypeId())) {
+        for (TypeInfo type : transactionTypeRegistry.values()) {
+            if (dto.getTypeId().equals(type.getId())) {
                 existsTransType = true;
                 break;
             }
@@ -59,8 +66,8 @@ public class TransactionService {
 
         boolean existsCurrencyType = false;
 
-        for (CurrencyType type : CurrencyType.values()) {
-            if (dto.getCurrencyId().equals(type.getCurrencyTypeId())) {
+        for (TypeInfo type : currencyTypeRegistry.values()) {
+            if (dto.getCurrencyId().equals(type.getId())) {
                 existsCurrencyType = true;
                 break;
             }
@@ -87,7 +94,7 @@ public class TransactionService {
         if (dto.getNumberTo() != null && accountService.getAccountId(dto.getNumberTo()) == null)
             throw new IncorrectParamException("Номер счета на который вы собираетесь перевести введен не верно", dto.getNumberTo(), "numberTo");
 
-        if (!dto.getTypeId().equals(TransactionType.DEPOSIT.getTransactionTypeId())){
+        if (!dto.getTypeId().equals(transactionTypeRegistry.get("DEPOSIT").getId())){
             if (dto.getAmount() != null && transactionRepository.balanceCheck(dto.getNumberFrom(), dto.getAmount()))
                 throw new IncorrectParamException("Не достаточно средств на счете", dto.getNumberTo(),
                                                 dto.getAmount().toString(), "numberTo", "amount");
@@ -95,8 +102,7 @@ public class TransactionService {
     }
 
     private boolean canTransaction(TransactionDto dto) {
-        if (TransactionType.DEPOSIT.getTransactionTypeId().equals(dto.getTypeId()))
-
+        if (transactionTypeRegistry.get("DEPOSIT").getId().equals(dto.getTypeId()))
             return true;
         else
             return accountService.canTransaction(dto.getNumberFrom());

@@ -4,9 +4,8 @@ import com.course.money_transfer_system.exception.IncorrectParamException;
 import com.course.money_transfer_system.transfer.dto.TransactionDto;
 import com.course.money_transfer_system.transfer.dto.TransactionHistoryDto;
 import com.course.money_transfer_system.transfer.model.TransactionHistory;
-import com.course.money_transfer_system.transfer.ref.CurrencyType;
-import com.course.money_transfer_system.transfer.ref.TransactionStatus;
-import com.course.money_transfer_system.transfer.ref.TransactionType;
+import com.course.money_transfer_system.transfer.model.TypeInfo;
+import com.course.money_transfer_system.transfer.ref.*;
 import com.course.money_transfer_system.transfer.repository.TransactionHistoryRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -22,11 +21,20 @@ public class TransactionHistoryService {
 
     private final TransactionHistoryRepository transactionHistoryRepository;
     private final AccountService accountService;
+    private final TransactionTypeRegistry transactionTypeRegistry;
+    private final CurrencyTypeRegistry currencyTypeRegistry;
+    private final TransactionStatusRegistry transactionStatusRegistry;
 
     public TransactionHistoryService(TransactionHistoryRepository transactionHistoryRepository,
-                                     AccountService accountService) {
+                                     AccountService accountService,
+                                     TransactionTypeRegistry transactionTypeRegistry,
+                                     CurrencyTypeRegistry currencyTypeRegistry,
+                                     TransactionStatusRegistry transactionStatusRegistry) {
         this.transactionHistoryRepository = transactionHistoryRepository;
         this.accountService = accountService;
+        this.transactionTypeRegistry = transactionTypeRegistry;
+        this.currencyTypeRegistry = currencyTypeRegistry;
+        this.transactionStatusRegistry = transactionStatusRegistry;
     }
 
     /**
@@ -51,12 +59,12 @@ public class TransactionHistoryService {
     public void createTransactionHistory(TransactionDto dto,
                                   String fromId,
                                   String toId,
-                                  TransactionType type,
+                                  TypeInfo type,
                                   String outgoingCode) {
 
         String currencyName = null;
-        for (CurrencyType currencyType : CurrencyType.values()) {
-            if (currencyType.getCurrencyTypeId().equals(dto.getCurrencyId())) {
+        for (TypeInfo currencyType : currencyTypeRegistry.values()) {
+            if (currencyType.getId().equals(dto.getCurrencyId())) {
                 currencyName = currencyType.getName();
             }
         }
@@ -66,8 +74,8 @@ public class TransactionHistoryService {
         }
 
         String typeName = null;
-        for (TransactionType transactionType : TransactionType.values()) {
-            if (transactionType.getTransactionTypeId().equals(dto.getTypeId())) {
+        for (TypeInfo transactionType : transactionTypeRegistry.values()) {
+            if (transactionType.getId().equals(dto.getTypeId())) {
                 typeName = transactionType.getName();
             }
         }
@@ -82,12 +90,12 @@ public class TransactionHistoryService {
                 toId == null ? null : accountService.getAccountId(toId),
                 dto.getAmount(),
                 dto.getCurrencyId(),
-                type.getTransactionTypeId(),
-                TransactionStatus.FAILED.getTransactionStatusId(),
+                type.getId(),
+                transactionStatusRegistry.get("FAILED").getId(),
                 LocalDateTime.now(),
                 type.getDescription(),
                 outgoingCode,
-                TransactionStatus.FAILED.getName(),
+                transactionStatusRegistry.get("FAILED").getName(),
                 currencyName,
                 typeName
         );
@@ -98,8 +106,8 @@ public class TransactionHistoryService {
     @Transactional
     public void transactionHistoryChangeStatus(Long id) {
         String nameStatus = null;
-        for (TransactionStatus status : TransactionStatus.values()) {
-            if (status.getTransactionStatusId().equals(id)) {
+        for (TypeInfo status : transactionStatusRegistry.values()) {
+            if (status.getId().equals(id)) {
                 nameStatus = status.getName();
             }
         }
