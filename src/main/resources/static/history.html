@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>История транзакций — Money Transfer</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body, html { margin:0; padding:0; height:100%; font-family: sans-serif; background:#f0f2f5; }
+        header { background:#1a73e8; color:white; padding:15px; display:flex; justify-content: space-between; align-items:center; }
+        main { padding:20px; min-height: calc(100% - 60px); }
+        .card { background:white; padding:20px; border-radius:10px; max-width:800px; margin:0 auto; box-shadow:0 4px 8px rgba(0,0,0,0.1); }
+        h2 { margin-top:0; }
+        .list { margin-top:20px; }
+        .transaction { border-bottom:1px solid #ddd; padding:10px 0; }
+        button { padding:8px 12px; border:none; border-radius:5px; cursor:pointer; background:#1a73e8; color:white; transition:0.3s; }
+        button:hover { background:#155ab6; margin-bottom:10px; }
+    </style>
+</head>
+<body>
+<header>
+    <div>История транзакций</div>
+    <div>
+        <button id="btnBack">Назад</button>
+        <button id="btnLogout">Выйти</button>
+    </div>
+</header>
+
+<main>
+    <section class="card">
+        <h2 id="accountInfo"></h2>
+        <div id="transactionsList" class="list"></div>
+        <div id="historyError" class="error"></div>
+    </section>
+</main>
+
+<script src="js/history.js"></script>
+</body>
+</html>

@@ -18,7 +18,7 @@ import static jooq.money_transfer.Tables.*;
 
 @Configuration
 @RequiredArgsConstructor
-public class TransactionTypeConfig {
+public class TypeConfig {
 
     @Autowired
     private final DSLContext dsl;

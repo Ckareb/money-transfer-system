@@ -24,7 +24,10 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login").permitAll() // открытый endpoint
+                        .requestMatchers(
+                                "/auth/login",
+                                "/", "/index.html", "/home.html", "/account.html", "/history.html",
+                                "/css/**", "/js/**", "/images/**").permitAll() // открытый endpoint
                         .anyRequest().authenticated()
                 ).addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

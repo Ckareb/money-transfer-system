@@ -7,7 +7,7 @@ import com.course.money_transfer_system.exception.ResponseInfo;
 import com.course.money_transfer_system.user.dto.UserAccessDto;
 import com.course.money_transfer_system.user.dto.UserDataDto;
 import com.course.money_transfer_system.user.dto.UserDto;
-import com.course.money_transfer_system.user.ref.RoleType;
+import com.course.money_transfer_system.user.ref.RoleRegistry;
 import com.course.money_transfer_system.user.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -26,11 +26,14 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RoleRegistry roleRegistry;
 
     public UserService(UserRepository userRepository,
-                       PasswordEncoder passwordEncoder) {
+                       PasswordEncoder passwordEncoder,
+                       RoleRegistry roleRegistry) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.roleRegistry = roleRegistry;
     }
 
     public Page<UserDto> getUsers(Pageable pageable){
@@ -70,7 +73,7 @@ public class UserService {
 
         //Заполняемые поля
         dto.setId(null);
-        dto.setRoleId(RoleType.USER.getRoleTypeId());
+        dto.setRoleId(roleRegistry.get("USER").getId());
         dto.setPassword(passwordEncoder.encode(dto.getPassword()));
         dto.getUserDataDto().setId(null);
 

@@ -1,5 +1,7 @@
 package com.course.money_transfer_system.auth.config;
 
+import com.course.money_transfer_system.auth.model.UserDetails;
+import com.course.money_transfer_system.auth.repository.UserAccountRepository;
 import com.course.money_transfer_system.exception.IncorrectParamException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
@@ -22,9 +24,12 @@ import java.util.List;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
+    private final UserAccountRepository userAccountRepository;
 
-    public JwtFilter(JwtUtil jwtUtil) {
+    public JwtFilter(JwtUtil jwtUtil,
+                     UserAccountRepository userAccountRepository) {
         this.jwtUtil = jwtUtil;
+        this.userAccountRepository = userAccountRepository;
     }
 
     @Override
@@ -45,12 +50,14 @@ public class JwtFilter extends OncePerRequestFilter {
                     throw new IncorrectParamException("Передан пустой токен");
                 }
 
+                UserDetails userDetails = new UserDetails(username, userAccountRepository.findByUsername(username).getId());
+
                 List<GrantedAuthority> authorities = role == null
                         ? Collections.emptyList()
                         : Collections.singletonList(new SimpleGrantedAuthority(role));
 
                 UsernamePasswordAuthenticationToken auth =
-                        new UsernamePasswordAuthenticationToken(username, password, authorities);
+                        new UsernamePasswordAuthenticationToken(userDetails, password, authorities);
 
                 SecurityContextHolder.getContext().setAuthentication(auth);
 

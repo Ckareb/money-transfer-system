@@ -1,9 +1,11 @@
 package com.course.money_transfer_system.auth.service;
 
 import com.course.money_transfer_system.auth.model.UserAccount;
+import com.course.money_transfer_system.auth.model.UserDetails;
 import com.course.money_transfer_system.auth.repository.UserAccountRepository;
 import com.course.money_transfer_system.exception.EntityNotFoundException;
 import com.course.money_transfer_system.exception.IncorrectParamException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,7 +23,8 @@ public class UserAccountService {
     }
 
     public UserAccount findUserId() {
-        String userName = AuthService.getUsername();
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String userName = userDetails.getUsername();
         return userRepository.findByUsername(userName);
     }
 

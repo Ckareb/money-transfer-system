@@ -1,5 +1,6 @@
 package com.course.money_transfer_system.transfer.controller;
 
+import com.course.money_transfer_system.auth.model.UserDetails;
 import com.course.money_transfer_system.transfer.dto.*;
 import com.course.money_transfer_system.exception.ResponseInfo;
 import com.course.money_transfer_system.transfer.service.AccountService;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,8 +35,9 @@ public class AccountController {
     }
 
     @Operation(summary = "Просмотр всех счетов аккаунта")
-    @GetMapping(path = "/userId/{userId}")
-    public List<AccountDto> getAccounts(@PathVariable Long userId) {
+    @GetMapping(path = "/me")
+    public List<AccountDto> getAccounts(@AuthenticationPrincipal UserDetails user) {
+        Long userId = user.getUserId();
         return  accountService.getAccounts(userId);
     }
 

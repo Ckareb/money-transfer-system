@@ -2,8 +2,7 @@ package com.course.money_transfer_system.user.repository;
 
 import com.course.money_transfer_system.user.dto.UserDataDto;
 import com.course.money_transfer_system.user.dto.UserDto;
-import com.course.money_transfer_system.user.ref.RoleType;
-import jakarta.annotation.PostConstruct;
+import com.course.money_transfer_system.user.ref.RoleRegistry;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -11,8 +10,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static jooq.auth.Tables.*;
-import static jooq.money_transfer.Tables.*;
-import static org.apache.kafka.common.requests.DeleteAclsResponse.log;
 import static org.jooq.impl.DSL.*;
 
 @Repository
@@ -20,11 +17,10 @@ public class UserRepository {
     @Autowired
     private DSLContext dsl;
 
-    @PostConstruct
-    private void fillRoles() {
-        dsl.selectFrom(ROLE).where(ROLE.SYS_NAME.isNotNull().and(ROLE.IS_ACTUAL.isTrue()))
-                .fetch().forEach(r -> RoleType.fill(r.getId(), r.getSysName(), r.getDescription()));
-        log.info("Role Type add in project");
+    private final RoleRegistry roleRegistry;
+
+    public UserRepository(RoleRegistry roleRegistry) {
+        this.roleRegistry = roleRegistry;
     }
 
 
@@ -49,7 +45,7 @@ public class UserRepository {
 
                 )
                 .from(USER_ACCOUNT)
-                .where(USER_ACCOUNT.ROLE_ID.eq(RoleType.USER.getRoleTypeId()))
+                .where(USER_ACCOUNT.ROLE_ID.eq(roleRegistry.get("USER").getId()))
                 .offset(offset).limit(limit)
                 .fetchInto(UserDto.class);
     }
@@ -67,7 +63,7 @@ public class UserRepository {
                 )
                 .from(USER_ACCOUNT)
                 .where(USER_ACCOUNT.ID.eq(id))
-                .and(USER_ACCOUNT.ROLE_ID.eq(RoleType.USER.getRoleTypeId()))
+                .and(USER_ACCOUNT.ROLE_ID.eq(roleRegistry.get("USER").getId()))
                 .fetchOneInto(UserDto.class);
     }
 
@@ -117,7 +113,7 @@ public class UserRepository {
         return dsl.update(USER_ACCOUNT)
                 .set(USER_ACCOUNT.ENABLED, false)
                 .where(USER_ACCOUNT.ID.eq(id))
-                .and(USER_ACCOUNT.ROLE_ID.eq(RoleType.USER.getRoleTypeId()))
+                .and(USER_ACCOUNT.ROLE_ID.eq(roleRegistry.get("USER").getId()))
                 .execute();
     }
 
